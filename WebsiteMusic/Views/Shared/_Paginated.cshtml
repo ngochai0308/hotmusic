@@ -1,0 +1,59 @@
+﻿@{
+    int from = (Model.PageIndex - 1) * Model.PageSize + 1;
+    int to = Model.PageIndex * Model.PageSize;
+    if (to > Model.TotalRecords)
+    {
+        to = Model.TotalRecords;
+    }
+
+    <p>
+        <i>
+            Total number of records in the page: @Model.Count<br />
+            Showing records from @from to @to:
+        </i>
+    </p>
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="1"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @prevDisabled">First Page</a>
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex-1)"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @prevDisabled">Previous</a>
+
+    @* Display page number*@
+    for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        if (i == Model.PageIndex)
+        {
+            <a class="btn" style="color: blue"><b>@i</b></a>
+        }
+        else
+        {
+            <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@i"
+   asp-route-filter="@ViewData["filter"]"
+           class="btn btn-default"><span>@i</span></a>
+        }
+
+    }
+
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex+1)"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @nextDisabled">
+        Next
+    </a>
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.TotalPages)"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @nextDisabled">Last Page</a>
+}

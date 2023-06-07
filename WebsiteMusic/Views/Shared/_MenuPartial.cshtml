@@ -1,0 +1,16 @@
+﻿﻿<body>
+    <div class="dropdown">
+        <a class="btn dropdown-toggle"
+           id="managedropdownmenu" data-toggle="dropdown">
+            @Model
+        </a>
+        <div class="dropdown-menu" aria-labelledby="managedropdownmenu">
+            <a class="dropdown-item" asp-action="ChangePassword" asp-controller="Users" asp-route-id="@Context.Session.GetString("Id")">
+                Đổi mật khẩu
+            </a>
+            <a class="dropdown-item" asp-action="profile" asp-controller="Users" asp-route-id="@Context.Session.GetString("Id")">
+                Hồ sơ
+            </a>
+        </div>
+    </div>
+</body>

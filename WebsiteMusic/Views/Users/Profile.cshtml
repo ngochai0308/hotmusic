@@ -1,0 +1,32 @@
+﻿@model WebsiteMusic.DataModel.User
+
+@{
+    ViewData["Title"] = "Thông tin";
+    var fileName = Context.Session.GetString("Image");
+}
+
+<div class="row border-dark">
+    <div class="col-md-2"> </div>
+    <div class="col-md-6">
+        <h3>Thông tin tài khoản</h3>
+        <span>Ảnh đại diện</span><br />
+        <div class="image-container">
+            <img src="~/image/User/@fileName" alt="Ảnh đại diện" class="image">
+        </div><br />
+        Họ và tên: @Html.DisplayFor(model => model.FullName)<br />
+        Email: @Html.DisplayFor(model => model.Email)<br />
+        @if (Model.DateOfBirth.HasValue)
+        {
+            <span>Ngày sinh: @Model.DateOfBirth.Value.ToString("dd/MM/yyyy")</span>
+        }
+        else
+        {
+            <span>Ngày sinh: N/A</span>
+        }<br />
+        Giới tính: @Html.DisplayFor(model => model.Gender)<br />
+        Điện thoại: @Html.DisplayFor(model => model.PhoneNumber)<br />
+        Địa chỉ: @Html.DisplayFor(model => model.Address)<br /><br />
+        <a asp-action="edit" asp-route-id="@Model.UserId" class="btn btn-primary"> Chỉnh sửa </a>
+           
+    </div>
+</div>
