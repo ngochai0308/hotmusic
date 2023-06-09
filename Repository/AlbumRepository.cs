@@ -3,6 +3,9 @@ using QuanLyNhac.DataModel;
 
 namespace HotMusic.Repository
 {
+    /// <summary>
+    /// Album repository
+    /// </summary>
     public class AlbumRepository : IAlbumRepository
     {
         private readonly MusicDbContext _dbContext;
