@@ -1,0 +1,29 @@
+﻿@model QuanLyNhac.DataModel.Albums
+
+@{
+    ViewData["Title"] = "Chi tiết Album";
+}
+
+<h1>Chi tiết Album</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AlbumTitle)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AlbumTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ArtistId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ArtistId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.AlbumId">Sửa</a> |
+    <a asp-action="Index">Trở về danh sách</a>
+</div>

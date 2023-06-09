@@ -1,0 +1,131 @@
+﻿@using QuanLyNhac.Common;
+@model PaginatedList<HotMusic.Models.AlbumViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách Album";
+}
+
+<h1>Danh sách Album</h1>
+
+<p>
+    <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
+</p>
+<form method="get" asp-action="index">
+    Nhập từ khóa
+    <input type="text" name="filter" value="@ViewData["currentFilter"]" />
+    <input type="submit" value="Tìm kiếm" id="btnSearch" />
+</form>
+@if (Model.Count < 0)
+{
+    <h3>Không có dữ liệu! Not found</h3>
+}
+else
+{
+    int fromRecord = (Model.PageIndex - 1) * Model.PageSize + 1;
+    int toRecord = Model.PageIndex * Model.PageSize;
+    if (toRecord > Model.TotalRecords)
+    {
+        toRecord = Model.TotalRecords;
+    }
+
+    int rowNumber = 1;
+
+    <table class="table">
+        <thead>
+            <tr class="header">
+                <th>STT</th>
+                <th>@Html.DisplayNameFor(model=>model.FirstOrDefault().AlbumId)</th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["SortTitle"]"
+                       asp-route-filter="@ViewData["filter"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().AlbumTitle)
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["SortId"]"
+                       asp-route-filter="@ViewData["filter"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistId)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model=>model.FirstOrDefault().ArtistName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="success">
+                    <td>
+                        @string.Format("{0}{1}",rowNumber < 10 ? "0":"", rowNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem=>item.AlbumId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AlbumTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArtistId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArtistName)
+                    </td>
+                    <td class="col-action">
+                        <a asp-action="Edit" asp-route-id="@item.AlbumId"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
+                        <a asp-action="Details" asp-route-id="@item.AlbumId"><img width="20" height="20" src="~/img/search.png" /></a>
+                        <a asp-action="Delete" asp-route-id="@item.AlbumId"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
+                    </td>
+                </tr>
+
+                rowNumber++;
+            }
+        </tbody>
+    </table>
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+    <h6>
+        Tổng số bản ghi: @Model.Count, Hiển thị từ: @fromRecord đến @toRecord
+    </h6>
+
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex-1)"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @prevDisabled">&lt;&lt;</a>
+
+    <!-- Display page number-->
+    for (int pageIndex = 1; pageIndex <= Model.TotalPages; pageIndex++)
+    {
+        if (pageIndex == Model.PageIndex)
+        {
+            <a class="btn btn-default">
+                <span style="color:red; font-size:18px;"><b>@pageIndex</b></span>
+            </a>
+        }
+        else
+        {
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["currentSort"]"
+               asp-route-pageNumber="@pageIndex"
+               asp-route-filter="@ViewData["filter"]"
+               class="btn btn-default">
+                <span>@pageIndex</span>
+            </a>
+        }
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex+1)"
+       asp-route-filter="@ViewData["filter"]"
+       class="btn btn-default @nextDisabled">
+        &gt;&gt;
+    </a>
+}
+

@@ -1,0 +1,57 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-image: url('../img/Colorful_music_background_dn.jpg');
+    background-size:cover;
+}
+
+.col-action {
+    width: 90px !important;
+}
+.container {
+    background:white;
+    border-radius:5px;
+}
+
+table {
+    margin-top:20px;
+    background:white;
+}
+th {
+    background-color: #04AA6D !important;
+    color: white;
+}
+
+tr:hover {
+    background-color: coral !important;
+    color: white;
+}
+
+tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+th a{
+    color:white !important;
+}
+
+h6 {
+    color: blueviolet;
+}
+.bold-text {
+    font-weight:bold;
+}
