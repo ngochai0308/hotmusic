@@ -10,6 +10,29 @@ namespace HotMusic.Models
         [Display(Name = "Tên bài hát")]
         public string SongTitle { get; set; }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [Display(Name = "Mã nghệ sĩ")]
         public int ArtistId { get; set; }
 
