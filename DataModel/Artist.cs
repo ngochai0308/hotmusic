@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuanLyNhac.DataModel
+namespace HotMusic.DataModel
 {
     [Table("Artists")]
     public class Artist

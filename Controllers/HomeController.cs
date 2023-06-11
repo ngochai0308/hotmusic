@@ -1,10 +1,10 @@
 ﻿using HotMusic.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyNhac.Models;
+using HotMusic.Models;
 using System.Diagnostics;
 
-namespace QuanLyNhac.Controllers
+namespace HotMusic.Controllers
 {
     [Authorize]
     public class HomeController : Controller

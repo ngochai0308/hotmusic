@@ -1,4 +1,4 @@
-﻿namespace QuanLyNhac.Common
+﻿namespace HotMusic.Common
 {
     public class PaginatedList<T> : List<T>
     {

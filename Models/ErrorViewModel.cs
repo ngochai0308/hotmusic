@@ -1,4 +1,4 @@
-namespace QuanLyNhac.Models
+namespace HotMusic.Models
 {
     public class ErrorViewModel
     {

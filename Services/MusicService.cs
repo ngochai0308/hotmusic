@@ -1,6 +1,6 @@
 ﻿using HotMusic.Contract;
 using HotMusic.Repository;
-using QuanLyNhac.DataModel;
+using HotMusic.DataModel;
 
 namespace HotMusic.Services
 {
