@@ -5,34 +5,50 @@ namespace HotMusic.Repository
 {
     public class UserRepository : IUserRepository
     {
+        private readonly MusicDbContext _dbContext;
+        public UserRepository(MusicDbContext context)
+        {
+            _dbContext = context;
+        }
+
         public void Add(Users user)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var delObj = _dbContext.Users.Find(id);
+            if (delObj != null)
+            {
+                _dbContext.Users.Remove(delObj);
+                _dbContext.SaveChanges();
+            }
         }
 
         public IEnumerable<Users> GetAll(string keyword = "")
         {
-            throw new NotImplementedException();
+            var listData = _dbContext.Users.ToList();
+            return listData;
         }
 
         public Users GetById(int id)
         {
-            throw new NotImplementedException();
+            Users user = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
+            return user;
         }
 
         public Users GetByName(string name)
         {
-            throw new NotImplementedException();
+            var user = _dbContext.Users.FirstOrDefault(u => u.UserName.Contains(name) || u.FullName.Contains(name));
+            return user;
         }
 
         public void Update(Users user)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.Update(user);
+            _dbContext.SaveChanges();
         }
     }
 }
