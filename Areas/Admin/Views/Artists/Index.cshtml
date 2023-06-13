@@ -1,0 +1,112 @@
+﻿@using HotMusic.Common;
+@model PaginatedList<HotMusic.Models.ArtistViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách nghệ sĩ";
+}
+
+<h1>Danh sách nghệ sĩ</h1>
+
+<p>
+    <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
+</p>
+
+<form method="get" asp-action="index">
+    <label>Nhập từ khóa</label>
+    <input type="text" name="filter" value="@ViewData["filter"]" />
+    <input type="submit" id="btnSubmit" value="Tìm kiếm" />
+</form>
+@if (Model.Count < 0)
+{
+    <h3>Không có dữ liệu! Not found</h3>
+}
+else
+{
+    int fromRecord = (Model.PageIndex - 1) * Model.PageSize + 1;
+    int toRecord = Model.PageIndex * Model.PageSize;
+    if (toRecord > Model.TotalRecords)
+    {
+        toRecord = Model.TotalRecords;
+    }
+    int rowNumber = 1;
+    <table class="table">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th width="120px">
+                    <a asp-action="index"
+                   asp-route-filter="@ViewData["filter"]"
+                   asp-route-sortOrder="@ViewData["sortName"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistName)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistBio)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@string.Format("{0}{1}", rowNumber < 10 ? "0": string.Empty, rowNumber)</td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArtistName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArtistBio)
+                    </td>
+                    <td class="col-action">
+                        <a asp-action="Edit" asp-route-id="@item.ArtistId"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
+                        <a asp-action="Details" asp-route-id="@item.ArtistId"><img width="20" height="20" src="~/img/search.png" /></a>
+                        <a asp-action="Delete" asp-route-id="@item.ArtistId"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
+                    </td>
+                </tr>
+                rowNumber++;
+            }
+        </tbody>
+    </table>
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+    <h6>
+        Tổng số bản ghi: @Model.Count, Hiển thị từ: @fromRecord đến @toRecord
+    </h6>
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex-1)"
+       asp-route-filter="@ViewData["filter"]"
+       class="btn btn-default @prevDisabled">&lt;&lt;</a>
+
+    <!-- Display page number-->
+    for (int pageIndex = 1; pageIndex <= Model.TotalPages; pageIndex++)
+    {
+        if (pageIndex == Model.PageIndex)
+        {
+            <a class="btn btn-default">
+                <span style="color:red; font-size:18px;"><b>@pageIndex</b></span>
+            </a>
+        }
+        else
+        {
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["currentSort"]"
+               asp-route-pageNumber="@pageIndex"
+               asp-route-filter="@ViewData["filter"]"
+               class="btn btn-default">
+                <span>@pageIndex</span>
+            </a>
+        }
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex+1)"
+       asp-route-filter="@ViewData["filter"]"
+       class="btn btn-default @nextDisabled">
+        &gt;&gt;
+    </a>
+}

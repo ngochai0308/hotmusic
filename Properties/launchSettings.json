@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "QuanLyNhac": {
+    "HotMusic": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

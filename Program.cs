@@ -4,7 +4,7 @@ using HotMusic.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using QuanLyNhac.DataModel;
+using HotMusic.DataModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +70,11 @@ app.UseSession();
 app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areaRoute",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}"
+    );
 
 app.MapControllerRoute(
     name: "default",

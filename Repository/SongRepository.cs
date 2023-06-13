@@ -1,5 +1,5 @@
 ﻿using HotMusic.Contract;
-using QuanLyNhac.DataModel;
+using HotMusic.DataModel;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace HotMusic.Repository

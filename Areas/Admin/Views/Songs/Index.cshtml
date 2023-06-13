@@ -1,0 +1,163 @@
+﻿@using HotMusic.Common;
+@using Microsoft.AspNetCore.Http;
+@model PaginatedList<HotMusic.Models.SongViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách bài hát";
+}
+
+<h1>Danh sách bài hát</h1>
+
+<p>
+    <a asp-action="Create">
+        <img width="20" height="20" src="~/img/addnew.png" />
+        Thêm mới
+    </a>
+</p>
+<form method="get" asp-action="index">
+    <span>Nhập từ khóa</span>
+    <input type="text" name="filter" value="@ViewData["filter"]" />
+    <input type="submit" name="search" value="Tìm kiếm" />
+</form>
+
+@if (Model.Count > 0)
+{
+    int fromRecord = (Model.PageIndex - 1) * Model.PageSize + 1;
+    int toRecord = Model.PageIndex * Model.PageSize;
+    if (toRecord > Model.TotalRecords)
+    {
+        toRecord = Model.TotalRecords;
+    }
+
+    int rowNumber = 1;
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    STT
+                </th>
+                <th>
+                    <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortSongName"]"
+                   asp-route-filter="@ViewData["filter"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().SongTitle)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistId)
+                </th>
+                <th>
+                    <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["SortAName"]"
+                   asp-route-filter="@ViewData["filter"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistName)
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="index"
+                   asp-route-filter="@ViewData["filter"]"
+                   asp-route-sortOrder="@ViewData["SortAlbumId"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().AlbumId)
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="index"
+                   asp-route-filter="@ViewData["filter"]"
+                   asp-route-sortOrder="@ViewData["SortAlbumName"]">
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().AlbumName)
+                    </a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ViewCount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().SongUrl)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @string.Format("{0}{1}", rowNumber<10? "0":"", rowNumber)
+                    </td>
+                    <td class="bold-text">
+                        <img src="~/img/duyet.png" />
+                        @Html.DisplayFor(modelItem => item.SongTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ArtistId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modeltem => item.ArtistName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AlbumId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AlbumName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ViewCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SongUrl)
+                    </td>
+                    <td class="col-action">
+                        <a asp-action="Edit" asp-route-id="@item.SongId"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
+                        <a asp-action="Details" asp-route-id="@item.SongId"><img width="20" height="20" src="~/img/search.png" /></a>
+                        <a asp-action="Delete" asp-route-id="@item.SongId"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
+                    </td>
+                </tr>
+                rowNumber++;
+            }
+        </tbody>
+    </table>
+
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+    <h4>
+        Tổng số bản ghi: @Model.Count, Hiển thị từ: @fromRecord đến @toRecord
+    </h4>
+
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex-1)"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @prevDisabled">Previous</a>
+
+    <!-- Display page number-->
+    for (int pageIndex = 1; pageIndex <= Model.TotalPages; pageIndex++)
+    {
+        if (pageIndex == Model.PageIndex)
+        {
+            <span style="color:red; font-size:18px;"><b>@pageIndex</b></span>
+        }
+        else
+        {
+            <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@pageIndex"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default">
+                <span>@pageIndex</span>
+            </a>
+        }
+    }
+
+    <a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex+1)"
+   asp-route-filter="@ViewData["filter"]"
+   class="btn btn-default @nextDisabled">
+        Next
+    </a>
+}
+else
+{
+    <h2>Không có dữ liệu</h2>
+}

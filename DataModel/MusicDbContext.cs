@@ -1,7 +1,7 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 
-namespace QuanLyNhac.DataModel
+namespace HotMusic.DataModel
 {
     public class MusicDbContext : DbContext
     {
