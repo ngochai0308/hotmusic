@@ -25,10 +25,37 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index3.html" class="nav-link">Home</a>
+                    <a class="nav-link" asp-area="admin" asp-controller="artists" asp-action="index">
+                        Quản lý nghệ sĩ
+                    </a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a class="nav-link" asp-area="admin" asp-controller="albums" asp-action="index">
+                        Quản lý Album
+                    </a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a class="nav-link" asp-area="admin" asp-controller="songs" asp-action="index">
+                        Quản lý bài hát
+                    </a>
+                </li>
+
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a class="nav-link" asp-area="admin" asp-controller="playlists" asp-="index">
+                        Danh sách phát
+                    </a>
+                </li>
+
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a class="nav-link" asp-area="admin" asp-controller="users" asp-action="index">
+                        Tài khoản người dùng
+                    </a>
+                </li>
+
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a class="nav-link" asp-area="admin" asp-controller="playlistSongs" asp-action="index">
+                        Danh sách bài hát
+                    </a>
                 </li>
             </ul>
 
@@ -158,8 +185,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img src="~/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <img src="~/img/hotmusic.png" alt="Hot Music" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">Hot Music</span>
             </a>
 
             <!-- Sidebar -->
@@ -203,19 +230,40 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="admin" asp-controller="artists" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v1</p>
+                                        <p>Quản lý nghệ sĩ</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="admin" asp-controller="albums" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v2</p>
+                                        <p>Quản lý Album</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" asp-area="admin" asp-controller="songs" asp-action="index">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Quản lý bài hát</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="admin" asp-controller="playlists" asp-="index">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách phát</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="admin" asp-controller="users" asp-action="index">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tài khoản người dùng</p>
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
                                     <a class="nav-link" asp-area="admin" asp-controller="playlistSongs" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v3</p>
+                                        <p>Danh sách bài hát</p>
                                     </a>
                                 </li>
                             </ul>
@@ -765,17 +813,17 @@
                 <a class="nav-link bg-light" href="#" data-widget="iframe-fullscreen"><i class="fas fa-expand"></i></a>
             </div>
             <div class="tab-content">
-               @* <div class="tab-empty">
-                    <h2 class="display-4">no tab selected!</h2>
+                @* <div class="tab-empty">
+                <h2 class="display-4">no tab selected!</h2>
                 </div>
                 <div class="tab-loading">
-                    <div>
-                        <h2 class="display-4">tab is loading <i class="fa fa-sync fa-spin"></i></h2>
-                    </div>
+                <div>
+                <h2 class="display-4">tab is loading <i class="fa fa-sync fa-spin"></i></h2>
+                </div>
                 </div>*@
                 @RenderBody()
             </div>
-           
+
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">

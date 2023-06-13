@@ -293,25 +293,25 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="pages/examples/invoice.html" class="nav-link">
+                                    <a class="nav-link" asp-area="admin" asp-controller="songs" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Invoice</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/examples/profile.html" class="nav-link">
+                                    <a class="nav-link" asp-area="admin" asp-controller="songs" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Profile</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/examples/e-commerce.html" class="nav-link">
+                                    <a class="nav-link" asp-area="admin" asp-controller="songs" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>E-commerce</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="pages/examples/projects.html" class="nav-link">
+                                    <a class="nav-link" asp-area="admin" asp-controller="songs" asp-action="index">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Projects</p>
                                     </a>
@@ -552,13 +552,14 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-
-    @*<!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-    $.widget.bridge('uibutton', $.ui.button)
+        $.widget.bridge('uibutton', $.ui.button)
     </script>
+
+    @*<!-- jQuery UI 1.11.4 -->
+    
     <!-- Bootstrap 4 -->
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- ChartJS -->
