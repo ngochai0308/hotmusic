@@ -6,7 +6,6 @@ using System.Diagnostics;
 
 namespace HotMusic.Controllers
 {
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -17,12 +16,13 @@ namespace HotMusic.Controllers
             _logger = logger;
             _musicService = musicService;
         }
-
+        [Route("/HomePage")]
+        public IActionResult HomePage()
+        {
+            return View();
+        }
         public IActionResult Index()
         {
-            // Get data from service
-            var listArtist = _musicService.ArtistRepository.GetAll();
-
             return View();
         }
 
