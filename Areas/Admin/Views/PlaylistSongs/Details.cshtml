@@ -1,0 +1,28 @@
+﻿@model HotMusic.Models.PlaylistSongViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết";
+}
+
+<h1>Chi tiết</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PlaylistId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PlaylistName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SongId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SongName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Trở về danh sách</a>
+</div>
