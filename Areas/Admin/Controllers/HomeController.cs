@@ -7,7 +7,6 @@ using System.Diagnostics;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,7 +21,6 @@ namespace HotMusic.Areas.Admin.Controllers
         public IActionResult Index()
         {
             // Get data from service
-            var listArtist = _musicService.ArtistRepository.GetAll();
 
             return View();
         }
