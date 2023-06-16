@@ -1,7 +1,7 @@
 ﻿@model HotMusic.Models.SongViewModel
 
 @{
-    ViewData["Title"] = "Thông tin bài hát";
+    ViewData["Title"] = "Chi tiết";
 }
 
 <h1>Thông tin bài hát</h1>
@@ -9,39 +9,40 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.SongTitle)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SongTitle)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ArtistId)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryTitle)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ArtistId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CategoryTitle)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AlbumId)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ArtistName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AlbumId)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ArtistName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ViewCount)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ViewCount)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.SongUrl)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.SongUrl)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.SongId">Cập nhật</a> |
-    <a asp-action="Index">Trở về danh sách</a>
+    <a asp-action="Edit" asp-route-id="@Model?.SongId">Sửa</a> |
+    <a asp-action="Index">Trở lại danh sách</a>
 </div>
+

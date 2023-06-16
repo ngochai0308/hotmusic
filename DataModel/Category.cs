@@ -3,20 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotMusic.DataModel
 {
-    [Table("Album")]
-    public class Albums
+    [Table("Category")]
+    public class Category
     {
         [Key]
-        public int AlbumId { get; set; }
-        public string AlbumTitle { get; set; }
-        public string? Thumbnail { get; set; }
-        public int ArtistId { get; set; }
-        public int CategoryID { get; set; }
-        public DateTime? CreatedDate {  get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryTitle { get; set; }
+        public int CountryId { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiledBy { get; set; }
         public bool? IsDeleted { get; set; }
-
     }
 }

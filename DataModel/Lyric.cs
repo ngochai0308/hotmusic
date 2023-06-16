@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotMusic.DataModel
 {
-    [Table("PlaylistSong")]
-    public class PlaylistSongs
+    [Table("Lyric")]
+    public class Lyric
     {
-        public int PlaylistId { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public string lyric { get; set; }
         public int SongId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
