@@ -41,38 +41,24 @@
                     <a asp-action="Index"
                    asp-route-sortOrder="@ViewData["SortSongName"]"
                    asp-route-filter="@ViewData["filter"]">
-                        @Html.DisplayNameFor(model => model.FirstOrDefault().SongTitle)
+                        @Html.DisplayNameFor(model => model.First().SongTitle)
                     </a>
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistId)
                 </th>
                 <th>
                     <a asp-action="Index"
                    asp-route-sortOrder="@ViewData["SortAName"]"
                    asp-route-filter="@ViewData["filter"]">
-                        @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistName)
+                        @Html.DisplayNameFor(model => model.First().ArtistName)
                     </a>
                 </th>
                 <th>
-                    <a asp-action="index"
-                   asp-route-filter="@ViewData["filter"]"
-                   asp-route-sortOrder="@ViewData["SortAlbumId"]">
-                        @Html.DisplayNameFor(model => model.FirstOrDefault().AlbumId)
-                    </a>
+                     @Html.DisplayNameFor(model => model.First().CategoryTitle)
                 </th>
                 <th>
-                    <a asp-action="index"
-                   asp-route-filter="@ViewData["filter"]"
-                   asp-route-sortOrder="@ViewData["SortAlbumName"]">
-                        @Html.DisplayNameFor(model => model.FirstOrDefault().AlbumName)
-                    </a>
+                    @Html.DisplayNameFor(model => model.First().ViewCount)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().ViewCount)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().SongUrl)
+                    @Html.DisplayNameFor(model => model.First().SongUrl)
                 </th>
                 <th></th>
             </tr>
@@ -85,20 +71,13 @@
                         @string.Format("{0}{1}", rowNumber<10? "0":"", rowNumber)
                     </td>
                     <td class="bold-text">
-                        <img src="~/img/duyet.png" />
                         @Html.DisplayFor(modelItem => item.SongTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ArtistId)
                     </td>
                     <td>
                         @Html.DisplayFor(modeltem => item.ArtistName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.AlbumId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.AlbumName)
+                        @Html.DisplayFor(modeltem => item.CategoryTitle)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ViewCount)

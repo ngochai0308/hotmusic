@@ -4,10 +4,10 @@ namespace HotMusic.Contract
 {
     public interface IArtistRepository
     {
-        IEnumerable<Artist> GetAll(string keyword = "");
-        Artist GetById(int id);
-        void Add(Artist artist);
-        void Update(Artist artist);
+        IEnumerable<Artists> GetAll(string keyword = "");
+        Artists GetById(int id);
+        void Add(Artists artist);
+        void Update(Artists artist);
         void Delete(int id);
     }
 }

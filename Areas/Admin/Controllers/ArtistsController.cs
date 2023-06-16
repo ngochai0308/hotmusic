@@ -44,7 +44,7 @@ namespace HotMusic.Areas.Admin.Controllers
             var query = _artistRepository.GetAll(filter);
 
 
-            List<Artist> listData = new List<Artist>();
+            List<Artists> listData = new List<Artists>();
 
             switch (sortOrder)
             {
@@ -61,7 +61,7 @@ namespace HotMusic.Areas.Admin.Controllers
 
             var mapperConfig = new AutoMapper.MapperConfiguration(config =>
             {
-                config.CreateMap<Artist, ArtistViewModel>();
+                config.CreateMap<Artists, ArtistViewModel>();
             });
             var mapper = mapperConfig.CreateMapper();
             var listResult = mapper.Map<List<ArtistViewModel>>(listData);
@@ -99,7 +99,7 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtistId,ArtistName,ArtistBio")] Artist artist)
+        public async Task<IActionResult> Create([Bind("ArtistId,ArtistName,ArtistBio")] Artists artist)
         {
             if (ModelState.IsValid)
             {
@@ -130,7 +130,7 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArtistId,ArtistName,ArtistBio")] Artist artist)
+        public async Task<IActionResult> Edit(int id, [Bind("ArtistId,ArtistName,ArtistBio")] Artists artist)
         {
             if (id != artist.ArtistId)
             {
