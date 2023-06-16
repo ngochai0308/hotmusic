@@ -38,10 +38,9 @@ namespace HotMusic.Repository
                         {
                             AlbumId = ab.AlbumId,
                             ArtistId = ab.ArtistId,
-                            AlbumTitle = ab.AlbumTitle,
-                            ArtistName = at.ArtistName
+                            AlbumTitle = ab.AlbumTitle
                         };
-            var listResult = query.Where(a => a.ArtistName.Contains(keyword) || a.AlbumTitle.Contains(keyword)).ToList();
+            var listResult = query.Where(a=>a.AlbumTitle.Contains(keyword)).ToList();
 
             return listResult;
         }
@@ -54,8 +53,7 @@ namespace HotMusic.Repository
                         {
                             AlbumId = ab.AlbumId,
                             ArtistId = ab.ArtistId,
-                            AlbumTitle = ab.AlbumTitle,
-                            ArtistName = at.ArtistName
+                            AlbumTitle = ab.AlbumTitle
                         };
             var album = query.FirstOrDefault(a => a.AlbumId == id);
             return album; // ctrl + K + D

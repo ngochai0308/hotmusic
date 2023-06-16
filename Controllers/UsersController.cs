@@ -53,9 +53,7 @@ namespace HotMusic.Controllers
 
         private void SaveUserInfoToSession(Users user)
         {
-            HttpContext.Session.SetString("FullName", user.FullName);
             HttpContext.Session.SetString("UserName", user.UserName);
-            HttpContext.Session.SetString("PhoneNumber", user.PhoneNumber);
         }
 
         /// <summary>

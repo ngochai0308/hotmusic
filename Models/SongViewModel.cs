@@ -1,57 +1,34 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace HotMusic.Models
 {
     public class SongViewModel
     {
-        [Display(Name = "Mã bài hát")]
+        [DisplayName("Mã bài hát")]
         public int SongId { get; set; }
-
-        [Display(Name = "Tên bài hát")]
+        [DisplayName("Tên bài hát")]
         public string SongTitle { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [Display(Name = "Mã nghệ sĩ")]
+        [DisplayName("Mã thế loại")]
+        public int CategoryId { get; set; }
+        [DisplayName("Mã nghệ sĩ")]
         public int ArtistId { get; set; }
-
-        [Display(Name = "Mã Album")]
-        public int AlbumId { get; set; }
-
-        [Display(Name = "Lượt nghe")]
-        [DisplayFormat(DataFormatString = "{0:N0}")]
+        [DisplayName("Lượt nghe")]
         public int ViewCount { get; set; }
-
-        [Display(Name = "Link")]
         public string SongUrl { get; set; }
 
-        [Display(Name = "Tên nghệ sĩ")]
-        [Required(AllowEmptyStrings = true)]
-        public string ArtistName { get; set; } = string.Empty;
+        [DataType(DataType.Upload)]
+        [DisplayName("Chọn ảnh bài hát")]
+        public IFormFile? FileUpload { get; set; }
 
-        [Display(Name = "Tên Album")]
-        [Required(AllowEmptyStrings = true)]
-        public string AlbumName { get; set; } = string.Empty;
+        [DisplayName("Thể loại")]
+        public string? CategoryTitle { get; set; }
+        [DisplayName("Nghệ sĩ")]
+        public string? ArtistName { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string? ModifiledBy { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

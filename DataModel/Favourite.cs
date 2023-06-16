@@ -2,11 +2,11 @@
 
 namespace HotMusic.DataModel
 {
-    [Table("PlaylistSong")]
-    public class PlaylistSongs
+    [Table("Favourite")]
+    public class Favourite
     {
-        public int PlaylistId { get; set; }
         public int SongId { get; set; }
+        public int UserId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
