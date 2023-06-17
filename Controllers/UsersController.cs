@@ -7,10 +7,10 @@ using HotMusic.Common;
 using HotMusic.DataModel;
 using HotMusic.Models;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace HotMusic.Controllers
 {
-    [Authorize]
     public class UsersController : Controller
     {
         private readonly MusicDbContext _context;
@@ -35,9 +35,7 @@ namespace HotMusic.Controllers
         public async Task<IActionResult> Logout()
         {
             // Delete session
-            HttpContext.Session.Remove("FullName");
             HttpContext.Session.Remove("UserName");
-            HttpContext.Session.Remove("PhoneNumber");
 
             // Remove authen
             await HttpContext.SignOutAsync();
@@ -151,6 +149,49 @@ namespace HotMusic.Controllers
         private bool UsersExists(int id)
         {
             return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+        }
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register([Bind("UserName,Password,Email,ConfilmPassword")] RegisterUserViewModel user)
+        {
+            if (user.UserName != null && user.Email != null)
+            {
+                if (_context.Users.Any(u=>u.UserName==user.UserName))
+                {
+                    ModelState.AddModelError("UserName", "Tên tài khoản đã tồn tại.Vui lòng đổi tên khác!");
+                }
+                if (_context.Users.Any(u => u.Email == user.Email))
+                {
+                    ModelState.AddModelError("Email", "Email đã tồn tại.Vui lòng đổi email khác!");
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                var mapper = new MapperConfiguration(config =>
+                {
+                    config.CreateMap<RegisterUserViewModel, Users>()
+                    .ForMember(u => u.UserName, ru => ru.MapFrom(sr => sr.UserName))
+                    .ForMember(u => u.Password, ru => ru.MapFrom(sr => Common.HashPass.HashPassword(user.Password)))
+                    .ForMember(u => u.Email, ru => ru.MapFrom(sr => sr.Email));
+                }).CreateMapper();
+                var newU = mapper.Map<Users>(user);
+
+                _context.Add(newU);
+                _context.SaveChanges();
+                var cookieOption = new CookieOptions();
+                cookieOption.Expires = DateTime.Now.AddMonths(1);
+                cookieOption.Path = "/";
+                cookieOption.Secure = true;
+
+                Response.Cookies.Append("UserName", user.UserName, cookieOption);
+                Response.Cookies.Append("Password", user.Password, cookieOption);
+                return RedirectToAction("Login");
+            }
+            return View(user);
         }
     }
 }
