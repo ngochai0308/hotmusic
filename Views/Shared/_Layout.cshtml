@@ -41,21 +41,19 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="index">Người dùng</a>
-                        </li>
-
-                        <li class="nav-item">
-                            @if (!string.IsNullOrEmpty(Context.Session.GetString("FullName")))
-                            {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="logout">Thoát</a>
-
-                                <span> Xin chào: @Context.Session.GetString("UserName")</span>
-                            }
-                            else
-                            {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="login">Đăng nhập</a>
-                            }
-                        </li>
+                        </li>  
                     </ul>
+                    @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
+                    {
+                        <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="logout">Thoát</a>
+
+                        <span> Xin chào: @Context.Session.GetString("UserName")</span>
+                    }
+                    else
+                    {
+                        <a class="nav-link text-dark" asp-controller="users" asp-action="login">Đăng nhập</a>
+                        <a class="nav-link text-dark" asp-controller="users" asp-action="register">Đăng kí</a>
+                    }
                 </div>
             </div>
         </nav>

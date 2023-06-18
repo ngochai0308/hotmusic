@@ -17,6 +17,10 @@ namespace HotMusic.DataModel
         public DateTime? ModifiedDate { get; set; }
         public string? ModifiledBy { get; set; }
         public bool? IsDeleted { get; set; }
+        [NotMapped]
+        public string? ArtistName { get; set; }
+        [NotMapped]
+        public string? CategoryTitle { get; set; }
 
     }
 }

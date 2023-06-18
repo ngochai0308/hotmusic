@@ -34,11 +34,16 @@ namespace HotMusic.Repository
         {
             var query = from ab in _dbContext.Albums
                         join at in _dbContext.Artists on ab.ArtistId equals at.ArtistId
+                        join c in _dbContext.Category on ab.CategoryID equals c.CategoryId
                         select new Albums()
                         {
                             AlbumId = ab.AlbumId,
                             ArtistId = ab.ArtistId,
-                            AlbumTitle = ab.AlbumTitle
+                            AlbumTitle = ab.AlbumTitle,
+                            CategoryID = c.CategoryId,
+                            CategoryTitle = c.CategoryTitle,
+                            ArtistName = at.ArtistName,
+                            Thumbnail = ab.Thumbnail
                         };
             var listResult = query.Where(a=>a.AlbumTitle.Contains(keyword)).ToList();
 
@@ -49,12 +54,17 @@ namespace HotMusic.Repository
         {
             var query = from ab in _dbContext.Albums
                         join at in _dbContext.Artists on ab.ArtistId equals at.ArtistId
+                        join c in _dbContext.Category on ab.CategoryID equals c.CategoryId
                         select new Albums()
                         {
                             AlbumId = ab.AlbumId,
                             ArtistId = ab.ArtistId,
-                            AlbumTitle = ab.AlbumTitle
-                        };
+                            AlbumTitle = ab.AlbumTitle,
+                            CategoryID = c.CategoryId,
+                            CategoryTitle = c.CategoryTitle,
+                            ArtistName = at.ArtistName,
+                            Thumbnail = ab.Thumbnail
+                        }; 
             var album = query.FirstOrDefault(a => a.AlbumId == id);
             return album; // ctrl + K + D
         }
