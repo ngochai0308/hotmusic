@@ -34,23 +34,33 @@ else
         <thead>
             <tr class="header">
                 <th>STT</th>
-                <th>@Html.DisplayNameFor(model=>model.FirstOrDefault().AlbumId)</th>
                 <th>
                     <a asp-action="Index"
                        asp-route-sortOrder="@ViewData["SortTitle"]"
                        asp-route-filter="@ViewData["filter"]">
-                        @Html.DisplayNameFor(model => model.FirstOrDefault().AlbumTitle)
+                        @Html.DisplayNameFor(model => model.First().AlbumTitle)
                     </a>
                 </th>
                 <th>
-                    <a asp-action="Index"
-                       asp-route-sortOrder="@ViewData["SortId"]"
-                       asp-route-filter="@ViewData["filter"]">
-                        @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistId)
-                    </a>
+                    @Html.DisplayNameFor(model=>model.First().ArtistName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model=>model.FirstOrDefault().ArtistName)
+                    @Html.DisplayNameFor(model=>model.First().CategoryTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model=>model.First().Thumbnail)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().CreatedBy)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ModifiedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().ModifiledBy)
                 </th>
                 <th></th>
             </tr>
@@ -63,16 +73,29 @@ else
                         @string.Format("{0}{1}",rowNumber < 10 ? "0":"", rowNumber)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem=>item.AlbumId)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.AlbumTitle)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ArtistId)
+                        @Html.DisplayFor(modelItem => item.ArtistName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ArtistName)
+                        @Html.DisplayFor(modelItem => item.CategoryTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Thumbnail)
+                    </td>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedBy)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ModifiledBy)
                     </td>
                     <td class="col-action">
                         <a asp-action="Edit" asp-route-id="@item.AlbumId"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>

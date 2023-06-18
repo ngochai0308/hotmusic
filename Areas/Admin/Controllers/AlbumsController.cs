@@ -16,12 +16,14 @@ namespace HotMusic.Areas.Admin.Controllers
     {
         private readonly IAlbumRepository _albumRepository;
         private readonly IArtistRepository _artistRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly int _pageSize = 5; // Max 5 records/page
 
-        public AlbumsController(IAlbumRepository albumRepository, IArtistRepository artistRepository)
+        public AlbumsController(IAlbumRepository albumRepository, IArtistRepository artistRepository,ICategoryRepository categoryRepository)
         {
             _albumRepository = albumRepository;
             _artistRepository = artistRepository;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: Albums
@@ -89,35 +91,51 @@ namespace HotMusic.Areas.Admin.Controllers
             }
 
             var albums = _albumRepository.GetById(id.Value);
+            var mapper = new MapperConfiguration(configure =>
+            {
+                configure.CreateMap<Albums, AlbumViewModel>();
+            }).CreateMapper();
+            var displayAlbum = mapper.Map<AlbumViewModel>(albums);
             if (albums == null)
             {
                 return NotFound();
             }
 
-            return View(albums);
+            return View(displayAlbum);
         }
 
-        private async Task LoadArtistAsync()
+        private async Task LoadDropdownAsync()
         {
-            var listArtist = _artistRepository.GetAll();
+            var listDataArtist = _artistRepository.GetAll();
+            var listDataCategory = _categoryRepository.GetAll();
 
-            var listData = new List<SelectListItem>();
-            foreach (var item in listArtist)
+            var listArtist = new List<SelectListItem>();
+            foreach (var item in listDataArtist)
             {
-                listData.Add(new SelectListItem()
+                listArtist.Add(new SelectListItem()
                 {
                     Text = item.ArtistName,
                     Value = item.ArtistId.ToString()
                 });
             }
+            var listCategory = new List<SelectListItem>();
+            foreach (var item in listDataCategory)
+            {
+                listCategory.Add(new SelectListItem()
+                {
+                    Text = item.CategoryTitle,
+                    Value = item.CategoryId.ToString()
+                });
+            }
 
-            ViewBag.listArtist = listData;
+            ViewBag.listArtist = listArtist;
+            ViewBag.listCategory = listCategory;
         }
         // GET: Albums/Create
         public async Task<IActionResult> Create()
         {
             // Get artist list for combobox
-            await LoadArtistAsync();
+            await LoadDropdownAsync();
 
             return View();
         }
@@ -127,14 +145,25 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlbumId,AlbumTitle,ArtistId")] AlbumViewModel albums)
+        public async Task<IActionResult> Create([Bind("AlbumId,AlbumTitle,ArtistId,CategoryID,Thumbnail,FileUpload")] AlbumViewModel albums)
         {
+
             if (ModelState.IsValid)
             {
+                var file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                    + Path.GetExtension(albums.FileUpload.FileName);
+
+                var file = Path.Combine("wwwroot", "img", "Album", file1);
+
+                using var filestream = new FileStream(file, FileMode.Create);
+                await albums.FileUpload.CopyToAsync(filestream);
+
+
                 // Mapping to DB model
                 var mapperConfig = new MapperConfiguration(config =>
                 {
-                    config.CreateMap<AlbumViewModel, Albums>();
+                    config.CreateMap<AlbumViewModel, Albums>()
+                    .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => file1));
                 });
 
                 var mapper = mapperConfig.CreateMapper();
@@ -144,7 +173,7 @@ namespace HotMusic.Areas.Admin.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            await LoadArtistAsync();
+            await LoadDropdownAsync();
             return View(albums);
         }
 
@@ -162,7 +191,7 @@ namespace HotMusic.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            await LoadArtistAsync();
+            await LoadDropdownAsync();
 
             return View(albums);
         }
@@ -209,7 +238,7 @@ namespace HotMusic.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
             // Get data for dropdownlist
-            await LoadArtistAsync();
+            await LoadDropdownAsync();
             return View(albums);
         }
 

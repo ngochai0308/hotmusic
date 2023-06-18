@@ -20,7 +20,9 @@ builder.Services.AddDbContext<MusicDbContext>(options =>
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<ISongRepository, SongRepository>();
 builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IMusicService, MusicService>();
+
 
 // Add session and cookies
 builder.Services.AddSession(options =>
