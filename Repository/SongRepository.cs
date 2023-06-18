@@ -1,5 +1,5 @@
 ﻿using HotMusic.Contract;
-using QuanLyNhac.DataModel;
+using HotMusic.DataModel;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace HotMusic.Repository
@@ -33,36 +33,26 @@ namespace HotMusic.Repository
         public IEnumerable<Songs> GetAll(string keyword = "")
         {
             var query = from s in _dbContext.Songs
-                        join ab in _dbContext.Albums on s.AlbumId equals ab.AlbumId
                         join at in _dbContext.Artists on s.ArtistId equals at.ArtistId
                         select new Songs()
                         {
-                            AlbumId = ab.AlbumId,
-                            AlbumName = ab.AlbumTitle,
                             ArtistId = s.ArtistId,
-                            ArtistName = at.ArtistName,
                             SongId = s.SongId,
                             SongTitle = s.SongTitle,
                             SongUrl = s.SongUrl,
                             ViewCount = s.ViewCount
                         };
-            var listResult = query.Where(s => s.SongTitle.Contains(keyword)
-                                           || s.AlbumName.Contains(keyword)
-                                           || s.ArtistName.Contains(keyword)).ToList();
+            var listResult = query.Where(s => s.SongTitle.Contains(keyword)).ToList();
             return listResult;
         }
 
         public Songs GetById(int id)
         {
             var query = from s in _dbContext.Songs
-                        join ab in _dbContext.Albums on s.AlbumId equals ab.AlbumId
                         join at in _dbContext.Artists on s.ArtistId equals at.ArtistId
                         select new Songs()
                         {
-                            AlbumId = ab.AlbumId,
-                            AlbumName = ab.AlbumTitle,
                             ArtistId = s.ArtistId,
-                            ArtistName = at.ArtistName,
                             SongId = s.SongId,
                             SongTitle = s.SongTitle,
                             SongUrl = s.SongUrl,

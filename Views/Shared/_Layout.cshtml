@@ -5,16 +5,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - QuanLyNhac</title>
+    <title>@ViewData["Title"] - HotMusic</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/QuanLyNhac.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HotMusic.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                <a class="navbar-brand" asp-area="" asp-controller="home" asp-action="index">Trang chủ</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,34 +22,37 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Songs" asp-action="Index">Bài hát</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="HomePage">HomePage</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="PlaylistSongs" asp-action="Index">Danh sách bài hát</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="songs" asp-action="index">Bài hát</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Playlists" asp-action="Index">Danh sách</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="playlistSongs" asp-action="index">Danh sách bài hát</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Artists" asp-action="Index">Nghệ sĩ</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="playlists" asp-action="index">Danh sách</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Albums" asp-action="Index">Album</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="artists" asp-action="index">Nghệ sĩ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Người dùng</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="albums" asp-action="index">Album</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="index">Người dùng</a>
                         </li>
 
                         <li class="nav-item">
                             @if (!string.IsNullOrEmpty(Context.Session.GetString("FullName")))
                             {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Logout">Thoát</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="logout">Thoát</a>
 
-                                <span> Xin chào: @Context.Session.GetString("FullName")</span>
+                                <span> Xin chào: @Context.Session.GetString("UserName")</span>
                             }
                             else
                             {
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Đăng nhập</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="login">Đăng nhập</a>
                             }
                         </li>
                     </ul>
@@ -65,7 +68,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - QuanLyNhac - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - HotMusic - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,4 +1,4 @@
-﻿using QuanLyNhac.DataModel;
+﻿using HotMusic.DataModel;
 
 namespace HotMusic.Contract
 {

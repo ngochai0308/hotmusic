@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyNhac.Models
+namespace HotMusic.Models
 {
     public class UserViewModel
     {

@@ -1,14 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuanLyNhac.DataModel
+namespace HotMusic.DataModel
 {
     [Table("PlaylistSong")]
     public class PlaylistSongs
     {
-        //[Key] => Không cần định nghĩa key cho cacs table có >1 cột làm khóa ở đây
-        public int SongId { get; set; }
-
         public int PlaylistId { get; set; }
+        public int SongId { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string? ModifiledBy { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }

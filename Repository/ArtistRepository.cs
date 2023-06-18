@@ -1,5 +1,5 @@
 ﻿using HotMusic.Contract;
-using QuanLyNhac.DataModel;
+using HotMusic.DataModel;
 
 namespace HotMusic.Repository
 {
@@ -14,7 +14,7 @@ namespace HotMusic.Repository
         /// Add artist
         /// </summary>
         /// <param name="artist">Object contains aritst information</param>
-        public void Add(Artist artist)
+        public void Add(Artists artist)
         {
             _dbContext.Artists.Add(artist);
             _dbContext.SaveChanges();
@@ -38,7 +38,7 @@ namespace HotMusic.Repository
         /// </summary>
         /// <param name="keyword">Value to filter</param>
         /// <returns>List data of artist</returns>
-        public IEnumerable<Artist> GetAll(string keyword = "")
+        public IEnumerable<Artists> GetAll(string keyword = "")
         {
             var listData = _dbContext.Artists.Where(a => a.ArtistName.Contains(keyword)).ToList();
             return listData;
@@ -49,7 +49,7 @@ namespace HotMusic.Repository
         /// </summary>
         /// <param name="id">Artist id</param>
         /// <returns></returns>
-        public Artist GetById(int id)
+        public Artists GetById(int id)
         {
             var artist = _dbContext.Artists.FirstOrDefault(a => a.ArtistId == id);
             return artist;
@@ -60,7 +60,7 @@ namespace HotMusic.Repository
         /// </summary>
         /// <param name="artist">Đối tượng chứa thông tin nghệ sĩ</param>
 
-        public void Update(Artist artist)
+        public void Update(Artists artist)
         {
             _dbContext.Artists.Update(artist);
             _dbContext.SaveChanges();

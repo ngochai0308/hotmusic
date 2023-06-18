@@ -1,30 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuanLyNhac.DataModel
+namespace HotMusic.DataModel
 {
-    [Table("Songs")]
+    [Table("Song")]
     public class Songs
     {
         [Key]
         public int SongId { get; set; }
-
         public string SongTitle { get; set; }
-
+        public int CategoryId { get; set; }
         public int ArtistId { get; set; }
-
-        public int AlbumId { get; set; }
-
         public int ViewCount { get; set; }
-
         public string SongUrl { get; set; }
-
+        public string Image { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string? ModifiledBy { get; set; }
+        public bool? IsDeleted { get; set; }
         [NotMapped]
-        [Required(AllowEmptyStrings = true)]
-        public string ArtistName { get; set; } = string.Empty;
-
-        [Required(AllowEmptyStrings = true)]
+        public string CategoryTitle { get; set; }
         [NotMapped]
-        public string AlbumName { get; set; } = string.Empty;
+        public string ArtistName { get; set; }
+
     }
 }
