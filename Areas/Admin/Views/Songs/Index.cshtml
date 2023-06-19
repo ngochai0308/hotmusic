@@ -58,6 +58,9 @@
                     @Html.DisplayNameFor(model => model.First().ViewCount)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.First().Image)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.First().SongUrl)
                 </th>
                 <th></th>
@@ -81,6 +84,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ViewCount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Image)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.SongUrl)

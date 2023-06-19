@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using HotMusic.Common;
 using HotMusic.DataModel;
 using System.Net.Http;
+using HotMusic.Contract;
+using AutoMapper;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -13,12 +15,16 @@ namespace HotMusic.Areas.Admin.Controllers
     [Authorize]
     public class SongsController : Controller
     {
-        private readonly MusicDbContext _context;
+        private readonly ISongRepository _songRepository;
+        private readonly IArtistRepository _artistRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly int _pageSize = 5;
 
-        public SongsController(MusicDbContext context)
+        public SongsController(ISongRepository songRepository, IArtistRepository artistRepository, ICategoryRepository categoryRepository)
         {
-            _context = context;
+            _songRepository = songRepository;
+            _artistRepository = artistRepository;
+            _categoryRepository = categoryRepository;
         }
 
         // GET: Songs CTR+M+O
@@ -41,27 +47,7 @@ namespace HotMusic.Areas.Admin.Controllers
             ViewData["SortSongName"] = sortOrder == "Name_DESC" ? "Name_ASC" : "Name_DESC";
             ViewData["SortAName"] = sortOrder == "AName_ASC" ? "AName_DESC" : "AName_ASC";
 
-            var listData = from s in _context.Songs
-                           join a in _context.Artists on s.ArtistId equals a.ArtistId
-                           join c in _context.Category on s.CategoryId equals c.CategoryId
-                           select new SongViewModel()
-                           {
-                               ArtistId = a.ArtistId,
-                               ArtistName = a.ArtistName,
-                               CategoryId = s.CategoryId,
-                               CategoryTitle = c.CategoryTitle,
-                               SongId = s.SongId,
-                               SongTitle = s.SongTitle,
-                               SongUrl = s.SongUrl,
-                               ViewCount = s.ViewCount
-                           };
-            // Unit test = kiem thu don vi
-            // Automation test => tester
-
-            // sum(a,b) = sum(3,5) = 8 => 8? FAILed
-            // Code coverage = 80% =, 60%
-
-            var listResult = await listData.Where(song => song.SongTitle.Contains(filter)).ToListAsync();
+            var listResult = _songRepository.GetAll(filter);
 
             switch (sortOrder)
             {
@@ -78,34 +64,26 @@ namespace HotMusic.Areas.Admin.Controllers
                     listResult = listResult.OrderBy(s => s.SongTitle).ToList();
                     break;
             }
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Songs, SongViewModel>();
+            }).CreateMapper();
+            var listSongs = mapper.Map<IEnumerable<SongViewModel>>(listResult);
 
-            return _context.Songs != null ?
-                        View(await PaginatedList<SongViewModel>.CreateAsync(listResult, pageNumber ?? 1, _pageSize)) :
+            return _songRepository != null ?
+                        View(await PaginatedList<SongViewModel>.CreateAsync(listSongs, pageNumber ?? 1, _pageSize)) :
                         Problem("Entity set 'MusicDbContext.Songs'  is null.");
         }
 
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Songs == null)
+            if (id == null || _songRepository == null)
             {
                 return NotFound();
             }
 
-            var songs = (from s in _context.Songs
-                        join a in _context.Artists on s.ArtistId equals a.ArtistId
-                        join c in _context.Category on s.CategoryId equals c.CategoryId
-                        select new Songs()
-                        {
-                            ArtistId = a.ArtistId,
-                            ArtistName = a.ArtistName,
-                            CategoryId = s.CategoryId,
-                            CategoryTitle = c.CategoryTitle,
-                            SongId = s.SongId,
-                            SongTitle = s.SongTitle,
-                            SongUrl = s.SongUrl,
-                            ViewCount = s.ViewCount
-                        }).FirstOrDefault(m => m.SongId == id);
+            var songs = _songRepository.GetById(id.Value);
             if (songs == null)
             {
                 return NotFound();
@@ -123,30 +101,30 @@ namespace HotMusic.Areas.Admin.Controllers
             return View(displaySong);
         }
 
-        private async Task LoadDropdownlistDataSync()
+        private async Task LoadDropdownlistData()
         {
-            var listArtist = from a in _context.Artists
+            var listArtist = from a in _artistRepository.GetAll()
                              select new SelectListItem()
                              {
                                  Value = a.ArtistId.ToString(),
                                  Text = a.ArtistName
                              };
 
-            var listCategory = from a in _context.Category
+            var listCategory = from a in  _categoryRepository.GetAll()
                             select new SelectListItem()
                             {
                                 Value = a.CategoryId.ToString(),
                                 Text = a.CategoryTitle
                             };
             // ViewBag: Dùng để mang dữ liệu từ Controller => View vẫn dùng được
-            ViewBag.listArtist = await listArtist.ToListAsync();
-            ViewBag.listCategory = await listCategory.ToListAsync();
+            ViewBag.listArtist = listArtist.ToList();
+            ViewBag.listCategory = listCategory.ToList();
         }
 
         // GET: Songs/Create
         public async Task<IActionResult> Create()
         {
-            await LoadDropdownlistDataSync();
+            await LoadDropdownlistData();
             return View();
         }
 
@@ -159,6 +137,7 @@ namespace HotMusic.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userName = HttpContext.Session.GetString("UserName");
                 var file1 = string.Empty;
                 if (songs.FileUpload != null)
                 {
@@ -172,20 +151,19 @@ namespace HotMusic.Areas.Admin.Controllers
                 }
                 var mapperConfig = new AutoMapper.MapperConfiguration(config =>
                 {
-                    config.CreateMap<SongViewModel, Songs>();
-                    //.ForMember(des=>des.SongTitle, source=> source.MapFrom(s=>s.AlbumName));
-                    // Map 2 thuộc tính có tên khác nhau của 2 đối tượng khác nhau
+                    config.CreateMap<SongViewModel, Songs>()
+                    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => file1))
+                    .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
+                    .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => userName));
                 });
                 var mapper = mapperConfig.CreateMapper();
                 var newSong = mapper.Map<Songs>(songs);
-                newSong.Image = file1;
 
-                _context.Add(newSong);
-                await _context.SaveChangesAsync();
+                _songRepository.Add(newSong);
                 return RedirectToAction(nameof(Index));
             }
 
-            await LoadDropdownlistDataSync();
+            await LoadDropdownlistData();
 
             return View(songs);
         }
@@ -193,18 +171,18 @@ namespace HotMusic.Areas.Admin.Controllers
         // GET: Songs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Songs == null)
+            if (id == null || _songRepository == null)
             {
                 return NotFound();
             }
 
-            var songs = await _context.Songs.FindAsync(id);
+            var songs = _songRepository.GetById(id.Value);
             if (songs == null)
             {
                 return NotFound();
             }
 
-            await LoadDropdownlistDataSync();
+            await LoadDropdownlistData();
 
             // Su dung auto mapper
             var mapperConfig = new AutoMapper.MapperConfiguration(config =>
@@ -232,9 +210,10 @@ namespace HotMusic.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var userName = HttpContext.Session.GetString("UserName");
                 try
                 {
-                    var checkSong = _context.Songs.FirstOrDefault(s => s.SongId == songs.SongId);
+                    var checkSong = _songRepository.GetById(songs.SongId);
                     var oldFileName = checkSong != null ? checkSong.Image : string.Empty;
                     var file1 = oldFileName;
 
@@ -246,28 +225,25 @@ namespace HotMusic.Areas.Admin.Controllers
                         using var filestream = new FileStream(file, FileMode.Create);
                         await songs.FileUpload.CopyToAsync(filestream);
                     }
-
-                    var mapperConfig = new AutoMapper.MapperConfiguration(config =>
-                    {
-                        config.CreateMap<SongViewModel, Songs>();
-                    });
-                    var mapper = mapperConfig.CreateMapper();
-
-                    checkSong = mapper.Map<Songs>(songs);
-
                     if (!string.IsNullOrEmpty(oldFileName) && oldFileName != file1)
                     {
                         var fileOld = Path.Combine("wwwroot", "img", "Song", oldFileName);
                         if (System.IO.File.Exists(fileOld))
                             System.IO.File.Delete(fileOld);
                     }
-                    checkSong.Image = file1;
-                    var trackedSong = _context.Songs.FirstOrDefault(s => s.SongId == songs.SongId);
-                    if (trackedSong != null)
-                        _context.Entry(trackedSong).State = EntityState.Detached;
 
-                    _context.Update(checkSong);
-                    await _context.SaveChangesAsync();
+                    var mapperConfig = new AutoMapper.MapperConfiguration(config =>
+                    {
+                        config.CreateMap<SongViewModel, Songs>()
+                        .ForMember(dest => dest.Image, opt => opt.MapFrom(src => file1))
+                        .ForMember(dest => dest.ModifiedDate, opt => opt.MapFrom(src => DateTime.Now))
+                        .ForMember(dest => dest.ModifiledBy, opt => opt.MapFrom(src => userName));
+                    });
+                    var mapper = mapperConfig.CreateMapper();
+
+                    var updateSong = mapper.Map<Songs>(songs);
+
+                    _songRepository.Update(updateSong);
 
 
                 }
@@ -285,32 +261,20 @@ namespace HotMusic.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            await LoadDropdownlistDataSync();
+            await LoadDropdownlistData();
             return View(songs);
         }
 
         // GET: Songs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Songs == null)
+            if (id == null || _songRepository == null)
             {
                 return NotFound();
             }
+            
 
-            var songs = (from s in _context.Songs
-                         join a in _context.Artists on s.ArtistId equals a.ArtistId
-                         join c in _context.Category on s.CategoryId equals c.CategoryId
-                         select new Songs()
-                         {
-                             ArtistId = a.ArtistId,
-                             ArtistName = a.ArtistName,
-                             CategoryId = s.CategoryId,
-                             CategoryTitle = c.CategoryTitle,
-                             SongId = s.SongId,
-                             SongTitle = s.SongTitle,
-                             SongUrl = s.SongUrl,
-                             ViewCount = s.ViewCount
-                         }).First(m => m.SongId == id);
+            var songs = _songRepository.GetById(id.Value);
             if (songs == null)
             {
                 return NotFound();
@@ -331,23 +295,27 @@ namespace HotMusic.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Songs == null)
+            if (_songRepository == null)
             {
                 return Problem("Entity set 'MusicDbContext.Songs'  is null.");
             }
-            var songs = await _context.Songs.FindAsync(id);
-            if (songs != null)
-            {
-                _context.Songs.Remove(songs);
-            }
+            //Delete image in wwwroot
+            var checkSong = _songRepository.GetById(id);
+            var oldFileName = checkSong != null ? checkSong.Image : string.Empty;
 
-            await _context.SaveChangesAsync();
+            if (!string.IsNullOrEmpty(oldFileName))
+            {
+                var fileOld = Path.Combine("wwwroot", "img", "Song", oldFileName);
+                if (System.IO.File.Exists(fileOld))
+                    System.IO.File.Delete(fileOld);
+            }
+            _songRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool SongsExists(int id)
         {
-            return (_context.Songs?.Any(e => e.SongId == id)).GetValueOrDefault();
+            return _songRepository.GetById(id) != null;
         }
     }
 }

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotMusic.Common;
 using HotMusic.DataModel;
+using System.Data.Entity;
+using HotMusic.Repository;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -19,7 +21,7 @@ namespace HotMusic.Areas.Admin.Controllers
         private readonly ICategoryRepository _categoryRepository;
         private readonly int _pageSize = 5; // Max 5 records/page
 
-        public AlbumsController(IAlbumRepository albumRepository, IArtistRepository artistRepository,ICategoryRepository categoryRepository)
+        public AlbumsController(IAlbumRepository albumRepository, IArtistRepository artistRepository, ICategoryRepository categoryRepository)
         {
             _albumRepository = albumRepository;
             _artistRepository = artistRepository;
@@ -150,6 +152,8 @@ namespace HotMusic.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var userName = HttpContext.Session.GetString("UserName");
+
                 var file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
                     + Path.GetExtension(albums.FileUpload.FileName);
 
@@ -163,7 +167,9 @@ namespace HotMusic.Areas.Admin.Controllers
                 var mapperConfig = new MapperConfiguration(config =>
                 {
                     config.CreateMap<AlbumViewModel, Albums>()
-                    .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => file1));
+                    .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => file1))
+                    .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
+                    .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => userName));
                 });
 
                 var mapper = mapperConfig.CreateMapper();
@@ -186,14 +192,19 @@ namespace HotMusic.Areas.Admin.Controllers
             }
 
             var albums = _albumRepository.GetById(id.Value);
+            
             if (albums == null)
             {
                 return NotFound();
             }
-
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Albums, AlbumViewModel>();
+            }).CreateMapper();
+            var displayAlbum = mapper.Map<AlbumViewModel>(albums);
             await LoadDropdownAsync();
 
-            return View(albums);
+            return View(displayAlbum);
         }
 
         // POST: Albums/Edit/5
@@ -201,8 +212,9 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,AlbumTitle,ArtistId")] AlbumViewModel albums)
+        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,AlbumTitle,ArtistId,CategoryID,Thumbnail,FileUpload")] AlbumViewModel albums)
         {
+            var userName = HttpContext.Session.GetString("UserName");
             if (id != albums.AlbumId)
             {
                 return NotFound();
@@ -212,10 +224,30 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 try
                 {
-                    // Convert to db model
+                    var checkAlbum = _albumRepository.GetById(albums.AlbumId);
+                    var oldFileName = checkAlbum != null ? checkAlbum.Thumbnail : string.Empty;
+                    var file1 = oldFileName;
+
+                    if (albums.FileUpload != null)
+                    {
+                        file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                        + Path.GetExtension(albums.FileUpload.FileName);
+                        var file = Path.Combine("wwwroot", "img", "Album", file1);
+                        using var filestream = new FileStream(file, FileMode.Create);
+                        await albums.FileUpload.CopyToAsync(filestream);
+                    }
+                    if (!string.IsNullOrEmpty(oldFileName) && oldFileName != file1)
+                    {
+                        var fileOld = Path.Combine("wwwroot", "img", "Album", oldFileName);
+                        if (System.IO.File.Exists(fileOld))
+                            System.IO.File.Delete(fileOld);
+                    }
                     var mapperConfig = new MapperConfiguration(config =>
                     {
-                        config.CreateMap<AlbumViewModel, Albums>();
+                        config.CreateMap<AlbumViewModel, Albums>()
+                        .ForMember(dest => dest.Thumbnail, opt => opt.MapFrom(src => file1))
+                        .ForMember(dest => dest.ModifiedDate, opt => opt.MapFrom(src => DateTime.Now))
+                        .ForMember(dest => dest.ModifiledBy, opt => opt.MapFrom(src => userName));
                     });
                     var mapper = mapperConfig.CreateMapper();
 
@@ -255,8 +287,13 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Albums, AlbumViewModel>();
+            }).CreateMapper();
+            var displayAlbum = mapper.Map<AlbumViewModel>(albums);
 
-            return View(albums);
+            return View(displayAlbum);
         }
 
         // POST: Albums/Delete/5
@@ -267,6 +304,15 @@ namespace HotMusic.Areas.Admin.Controllers
             if (_albumRepository == null)
             {
                 return Problem("Entity set 'MusicDbContext.Albums'  is null.");
+            }
+            var checkAlbum = _albumRepository.GetById(id);
+            var oldFileName = checkAlbum != null ? checkAlbum.Thumbnail : string.Empty;
+
+            if (!string.IsNullOrEmpty(oldFileName))
+            {
+                var fileOld = Path.Combine("wwwroot", "img", "Album", oldFileName);
+                if (System.IO.File.Exists(fileOld))
+                    System.IO.File.Delete(fileOld);
             }
             _albumRepository.Delete(id);
             return RedirectToAction(nameof(Index));

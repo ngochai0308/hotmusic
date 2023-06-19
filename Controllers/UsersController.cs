@@ -83,7 +83,8 @@ namespace HotMusic.Controllers
                 if (checkUser != null)
                 {
                     // Save to session
-                    SaveUserInfoToSession(checkUser);
+                    /*SaveUserInfoToSession(checkUser);*/
+                    HttpContext.Session.SetString("UserName", user.UserName);
 
                     // Cookie
                     if (user.IsRememberMe)

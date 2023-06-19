@@ -7,6 +7,7 @@ using System.Diagnostics;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

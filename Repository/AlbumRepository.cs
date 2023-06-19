@@ -43,7 +43,11 @@ namespace HotMusic.Repository
                             CategoryID = c.CategoryId,
                             CategoryTitle = c.CategoryTitle,
                             ArtistName = at.ArtistName,
-                            Thumbnail = ab.Thumbnail
+                            Thumbnail = ab.Thumbnail,
+                            CreatedDate = ab.CreatedDate,
+                            CreatedBy = ab.CreatedBy,
+                            ModifiedDate = ab.ModifiedDate,
+                            ModifiledBy = ab.ModifiledBy
                         };
             var listResult = query.Where(a=>a.AlbumTitle.Contains(keyword)).ToList();
 
@@ -63,8 +67,12 @@ namespace HotMusic.Repository
                             CategoryID = c.CategoryId,
                             CategoryTitle = c.CategoryTitle,
                             ArtistName = at.ArtistName,
-                            Thumbnail = ab.Thumbnail
-                        }; 
+                            Thumbnail = ab.Thumbnail,
+                            CreatedDate = ab.CreatedDate,
+                            CreatedBy = ab.CreatedBy,
+                            ModifiedDate = ab.ModifiedDate,
+                            ModifiledBy = ab.ModifiledBy
+                        };
             var album = query.FirstOrDefault(a => a.AlbumId == id);
             return album; // ctrl + K + D
         }

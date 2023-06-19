@@ -14,7 +14,7 @@ namespace HotMusic.DataModel
         public int ArtistId { get; set; }
         public int ViewCount { get; set; }
         public string SongUrl { get; set; }
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

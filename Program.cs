@@ -28,7 +28,7 @@ builder.Services.AddScoped<IMusicService, MusicService>();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".AdventureWorks.Session";
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromHours(10);
     options.Cookie.IsEssential = true;
 });
 

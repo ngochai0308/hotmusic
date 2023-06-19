@@ -1,4 +1,4 @@
-﻿@model HotMusic.DataModel.Albums
+﻿@model HotMusic.Models.AlbumViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,31 +10,42 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlbumId" />
-            <div class="form-group">
-                <label asp-for="AlbumTitle" class="control-label"></label>
-                <input asp-for="AlbumTitle" class="form-control" />
-                <span asp-validation-for="AlbumTitle" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ArtistId" class="control-label"></label>
-                <select asp-for="ArtistId" class="form-control"
-                        asp-items="(IEnumerable<SelectListItem>)ViewBag.listArtist">
-                    <option>--Chọn nghệ sĩ--</option>
-                </select>
-                <span asp-validation-for="ArtistId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+                <div class="form-group">
+                    <label asp-for="AlbumTitle" class="control-label"></label>
+                    <input asp-for="AlbumTitle" class="form-control" />
+                    <span asp-validation-for="AlbumTitle" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ArtistName" class="control-label"></label>
+                    <select asp-for="ArtistId" class="form-control"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.listArtist">
+                        <option>--Chọn nghệ sĩ--</option>
+                    </select>
+                    <span asp-validation-for="ArtistId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryTitle" class="control-label"></label>
+                    <select asp-for="CategoryID" class="form-control"
+                            asp-items="(IEnumerable<SelectListItem>)ViewBag.listCategory">
+                        <option>--Chọn thể loại--</option>
+                    </select>
+                    <span asp-validation-for="CategoryID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FileUpload"></label>
+                    <input asp-for="FileUpload" />
+                    <span asp-validation-for="FileUpload"></span>
+                </div>
+                 <input type="submit" value="Lưu" asp-route-id="@Model.AlbumId" class="btn btn-primary" />
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Trở lại danh sách</a>
 </div>
 
 @section Scripts {
