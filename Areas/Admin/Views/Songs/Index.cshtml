@@ -14,6 +14,7 @@
         Thêm mới
     </a>
 </p>
+<a asp-action="ExportCSV" asp-controller="songs">xuất file</a>
 <form method="get" asp-action="index">
     <span>Nhập từ khóa</span>
     <input type="text" name="filter" value="@ViewData["filter"]" />

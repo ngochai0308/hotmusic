@@ -10,6 +10,9 @@
 <p>
     <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
 </p>
+<p>
+    <a asp-action="ExportCSV" asp-controller="Albums" asp-area="Admin">Xuất file CSV</a>
+</p>
 <form method="get" asp-action="index">
     Nhập từ khóa
     <input type="text" name="filter" value="@ViewData["currentFilter"]" />

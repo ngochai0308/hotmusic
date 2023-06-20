@@ -9,6 +9,7 @@ using HotMusic.Common;
 using HotMusic.DataModel;
 using System.Data.Entity;
 using HotMusic.Repository;
+using System.Text;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -317,7 +318,35 @@ namespace HotMusic.Areas.Admin.Controllers
             _albumRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
-
+        public FileResult ExportCSV()
+        {
+            string[] columnNames = new string[] { "AlbumId", "AlbumTitle", "Thumbnail", "ArtistId", "ArtistName", "CategoryID", "CategoryTitle", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiledBy" };
+           
+            var listAlbum = _albumRepository.GetAll();
+            string csv = string.Empty;
+            foreach (var column in columnNames)
+            {
+                csv += column + ",";
+            }
+            csv += "\r\n";
+            foreach (var album in listAlbum)
+            {
+                csv += album.AlbumId.ToString().Replace(",",";")+',';
+                csv += album.AlbumTitle.Replace(",", ";") + ',';
+                csv += album.Thumbnail?.Replace(",", ";") + ',';
+                csv += album.ArtistId.ToString().Replace(",", ";") + ',';
+                csv += album.ArtistName?.Replace(",", ";") + ',';
+                csv += album.CategoryID.ToString().Replace(",", ";") + ',';
+                csv += album.CategoryTitle?.Replace(",", ";") + ',';
+                csv += album.CreatedDate?.ToString().Replace(",", ";") + ',';
+                csv += album.CreatedBy?.Replace(",", ";") + ',';
+                csv += album.ModifiedDate?.ToString().Replace(",", ";") + ',';
+                csv += album.ModifiledBy?.Replace(",", ";") + ','; 
+                csv += "\r\n";
+            }
+            byte[] bytes = Encoding.UTF8.GetBytes(csv);
+            return File(bytes, "text/csv", "album.csv");
+        }
         private bool AlbumsExists(int id)
         {
             return _albumRepository.GetById(id) != null;
