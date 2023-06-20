@@ -251,7 +251,7 @@ namespace HotMusic.Areas.Admin.Controllers
                     SaveUserInfoToSession(checkUser);
 
                     // Cookie
-                    if (user.IsRememberMe)
+                    /*if (user.IsRememberMe)
                     {
                         // Save to cookie
                         var cookieOption = new CookieOptions();
@@ -261,7 +261,7 @@ namespace HotMusic.Areas.Admin.Controllers
 
                         Response.Cookies.Append("Username", user.UserName, cookieOption);
                         Response.Cookies.Append("Password", user.Password, cookieOption);
-                    }
+                    }*/
 
                     // Thong bao login cho authen
                     var identity = new ClaimsIdentity(new[] 

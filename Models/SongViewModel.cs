@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotMusic.Models
 {
@@ -16,6 +17,9 @@ namespace HotMusic.Models
         [DisplayName("Lượt nghe")]
         public int ViewCount { get; set; }
         public string SongUrl { get; set; }
+        [DisplayName("Hình ảnh")]
+        [NotMapped]
+        public string? Image { get; set; }
 
         [DataType(DataType.Upload)]
         [DisplayName("Chọn ảnh bài hát")]

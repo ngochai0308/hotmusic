@@ -26,7 +26,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="AlbumId" />
-        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <input type="submit" value="Xóa" asp-route-id="@Model.AlbumId" class="btn btn-danger" /> |
         <a asp-action="Index">Trở về danh sách</a>
     </form>
 </div>
