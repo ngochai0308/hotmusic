@@ -78,48 +78,52 @@ namespace HotMusic.Controllers
             {
                 // Check data in DB
                 var checkUser = _context.Users.Where(u =>
-                                           u.UserName == user.UserName
-                                        && u.Password == user.Password).FirstOrDefault();
+                                           u.UserName == user.UserName).FirstOrDefault();
+                
                 if (checkUser != null)
                 {
-                    // Save to session
-                    /*SaveUserInfoToSession(checkUser);*/
-                    HttpContext.Session.SetString("UserName", user.UserName);
-
-                    // Cookie
-                    if (user.IsRememberMe)
+                    if (HashPass.VerifyPassword(user.Password, checkUser.Password))
                     {
-                        // Save to cookie
-                        var cookieOption = new CookieOptions();
-                        cookieOption.Expires = DateTime.Now.AddMonths(1); // Luu mot thang
-                        cookieOption.Path = "/";
-                        cookieOption.Secure = true;
+                        HttpContext.Session.SetString("UserName", user.UserName);
 
-                        Response.Cookies.Append("Username", user.UserName, cookieOption);
-                        Response.Cookies.Append("Password", user.Password, cookieOption);
+                        // Cookie
+                        if (user.IsRememberMe)
+                        {
+                            // Save to cookie
+                            var cookieOption = new CookieOptions();
+                            cookieOption.Expires = DateTime.Now.AddMonths(1); // Luu mot thang
+                            cookieOption.Path = "/";
+                            cookieOption.Secure = true;
+
+                            Response.Cookies.Append("Username", user.UserName, cookieOption);
+                            Response.Cookies.Append("Password", user.Password, cookieOption);
+                            // Save to session
+                            /*SaveUserInfoToSession(checkUser);*/
+                        }
+
+                            // Thong bao login cho authen
+                        var identity = new ClaimsIdentity(new[]
+                        {
+                            new Claim(ClaimTypes.Name, user.UserName),
+                            new Claim(ClaimTypes.Role, "User") // Add column for user table => Get here
+                        }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        var claimPrincipal = new ClaimsPrincipal(identity);
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
+
+                            // Get return url from session
+                        var returnUrl = HttpContext.Session.GetString("returnUrl");
+                        if (!string.IsNullOrEmpty(returnUrl))
+                        {
+                            Response.Redirect(returnUrl);
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
-
-                    // Thong bao login cho authen
-                    var identity = new ClaimsIdentity(new[] 
-                    {
-                        new Claim(ClaimTypes.Name, user.UserName),
-                        new Claim(ClaimTypes.Role, "User") // Add column for user table => Get here
-                    }, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    var claimPrincipal = new ClaimsPrincipal(identity);
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
-
-                    // Get return url from session
-                    var returnUrl = HttpContext.Session.GetString("returnUrl");
-                    if(!string.IsNullOrEmpty(returnUrl))
-                    {
-                        Response.Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+                    
                 }
                 else
                 {

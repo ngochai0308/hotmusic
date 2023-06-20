@@ -10,7 +10,8 @@ namespace HotMusic.Common
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
         public static bool VerifyPassword(string password,string hashedPassword) {
-            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+            bool verify = BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+            return verify;
         }
     }
 }
