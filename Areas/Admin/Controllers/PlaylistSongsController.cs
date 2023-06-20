@@ -8,7 +8,7 @@ using HotMusic.DataModel;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class PlaylistSongsController : Controller
     {
         private readonly MusicDbContext _context;

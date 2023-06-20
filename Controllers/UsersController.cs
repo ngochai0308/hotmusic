@@ -36,6 +36,7 @@ namespace HotMusic.Controllers
         {
             // Delete session
             HttpContext.Session.Remove("UserName");
+            HttpContext.Session.Remove("Role");
 
             // Remove authen
             await HttpContext.SignOutAsync();
@@ -52,6 +53,7 @@ namespace HotMusic.Controllers
         private void SaveUserInfoToSession(Users user)
         {
             HttpContext.Session.SetString("UserName", user.UserName);
+            HttpContext.Session.SetString("Role", user.Role??"User");
         }
 
         /// <summary>
@@ -84,8 +86,8 @@ namespace HotMusic.Controllers
                 {
                     if (HashPass.VerifyPassword(user.Password, checkUser.Password))
                     {
-                        HttpContext.Session.SetString("UserName", user.UserName);
-
+                        // Save to session
+                        SaveUserInfoToSession(checkUser);
                         // Cookie
                         if (user.IsRememberMe)
                         {
@@ -97,15 +99,13 @@ namespace HotMusic.Controllers
 
                             Response.Cookies.Append("Username", user.UserName, cookieOption);
                             Response.Cookies.Append("Password", user.Password, cookieOption);
-                            // Save to session
-                            /*SaveUserInfoToSession(checkUser);*/
                         }
-
+                        var role = checkUser.Role ?? "User";
                             // Thong bao login cho authen
                         var identity = new ClaimsIdentity(new[]
                         {
                             new Claim(ClaimTypes.Name, user.UserName),
-                            new Claim(ClaimTypes.Role, "User") // Add column for user table => Get here
+                            new Claim(ClaimTypes.Role, role) // Add column for user table => Get here
                         }, CookieAuthenticationDefaults.AuthenticationScheme);
 
                         var claimPrincipal = new ClaimsPrincipal(identity);

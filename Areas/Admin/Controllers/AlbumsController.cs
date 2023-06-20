@@ -13,7 +13,7 @@ using HotMusic.Repository;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AlbumsController : Controller
     {
         private readonly IAlbumRepository _albumRepository;

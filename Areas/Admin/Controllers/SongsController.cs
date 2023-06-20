@@ -12,7 +12,7 @@ using AutoMapper;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SongsController : Controller
     {
         private readonly ISongRepository _songRepository;
