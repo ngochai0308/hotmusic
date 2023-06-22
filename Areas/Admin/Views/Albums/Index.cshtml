@@ -7,12 +7,20 @@
 
 <h1>Danh sách Album</h1>
 
-<p>
-    <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
-</p>
-<p>
-    <a asp-action="ExportCSV" asp-controller="Albums" asp-area="Admin">Xuất file CSV</a>
-</p>
+<div class="row">
+    <div class="col-3">
+        <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
+    </div>
+    <div class="col-3">
+        <a asp-action="ExportCSV" asp-controller="Albums" asp-area="Admin">Xuất file CSV</a>
+    </div>
+    <div class="col-3">
+        <form method="post" enctype="multipart/form-data" asp-action="ImportCSV" asp-controller="Albums" asp-area="Admin">
+            <input type="file" name="csvFile" required/>
+            <button type="submit">Import</button>
+        </form>
+    </div>
+</div>
 <form method="get" asp-action="index">
     Nhập từ khóa
     <input type="text" name="filter" value="@ViewData["currentFilter"]" />
