@@ -52,6 +52,8 @@ namespace HotMusic.Controllers
         private void SaveUserInfoToSession(Users user)
         {
             HttpContext.Session.SetString("UserName", user.UserName);
+            HttpContext.Session.SetInt32("Id", user.UserId);
+
         }
 
         /// <summary>
@@ -84,7 +86,7 @@ namespace HotMusic.Controllers
                 {
                     if (HashPass.VerifyPassword(user.Password, checkUser.Password))
                     {
-                        HttpContext.Session.SetString("UserName", user.UserName);
+                        SaveUserInfoToSession(checkUser);
 
                         // Cookie
                         if (user.IsRememberMe)
@@ -146,6 +148,41 @@ namespace HotMusic.Controllers
 
             // Ở nguyên trang hiện tại
             return View(user);
+        }
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ChangePassword(int? id, [Bind("Password", "NewPassword", "ConfirmPassword")]ChangePasswordViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return Content("Không tìm thấy người dùng do id null");
+                }
+                var checkUser = _context.Users.FirstOrDefault(u=>u.UserId==id);
+                if (checkUser == null)
+                {
+                    return Content("Không tìm thấy người dùng");
+                }
+                if (HashPass.VerifyPassword(user.Password, checkUser.Password))
+                {
+                    checkUser.Password = user.NewPassword;
+                    Response.Cookies.Append("Password", user.NewPassword);
+                    TempData["StatusMessage"] = "Đổi mật khẩu thành công!";
+                    return RedirectToAction("index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu nhập không đúng");
+                }
+                TempData["StatusMessage"] = "Mật khẩu nhập không đúng vui lòng nhập lại!";
+            }
+            
+
+            return View();
         }
 
         [AllowAnonymous]

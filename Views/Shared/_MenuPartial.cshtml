@@ -1,0 +1,29 @@
+﻿@{
+    var fileName = Context.Session.GetString("Image");
+}
+<body>
+    <div class="dropdown">
+        <a class="btn dropdown-toggle"
+           id="managedropdownmenu" data-toggle="dropdown">
+            <div class="avatar">
+                @if (string.IsNullOrEmpty(fileName))
+                {
+                    <img src="~/img/User/noavatar.png" alt="Ảnh đại diện">
+                }
+                else
+                {
+                    <img src="~/image/User/@fileName" alt="Ảnh đại diện">
+                }
+            </div>
+            <span class="username">@Model</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="managedropdownmenu">
+            <a class="dropdown-item" asp-action="ChangePassword" asp-controller="Users" asp-route-id="@Context.Session.GetInt32("Id")">
+                Đổi mật khẩu
+            </a>
+            <a class="dropdown-item" asp-area="Admin" asp-action="profile" asp-controller="Users" asp-route-id="@Context.Session.GetInt32("Id")">
+                Hồ sơ
+            </a>
+        </div>
+    </div>
+</body>
