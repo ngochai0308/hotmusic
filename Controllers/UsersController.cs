@@ -14,12 +14,12 @@ namespace HotMusic.Controllers
     public class UsersController : Controller
     {
         private readonly MusicDbContext _context;
- 
+
         public UsersController(MusicDbContext context)
         {
             _context = context;
         }
-        
+
         [AllowAnonymous]
         public IActionResult Login()
         {
@@ -81,7 +81,7 @@ namespace HotMusic.Controllers
                 // Check data in DB
                 var checkUser = _context.Users.Where(u =>
                                            u.UserName == user.UserName).FirstOrDefault();
-                
+
                 if (checkUser != null)
                 {
                     if (HashPass.VerifyPassword(user.Password, checkUser.Password))
@@ -112,7 +112,7 @@ namespace HotMusic.Controllers
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
 
-                            // Get return url from session
+                        // Get return url from session
                         var returnUrl = HttpContext.Session.GetString("returnUrl");
                         if (!string.IsNullOrEmpty(returnUrl))
                         {
@@ -120,10 +120,13 @@ namespace HotMusic.Controllers
                         }
                         else
                         {
+                            if (checkUser.Role.ToLower() == "admin")
+                            {
+                                return RedirectToAction("index", "home", new { Area = "Admin" });
+                            }
                             return RedirectToAction("Index", "Home");
                         }
                     }
-                    
                 }
                 else
                 {
@@ -164,7 +167,7 @@ namespace HotMusic.Controllers
         {
             if (user.UserName != null && user.Email != null)
             {
-                if (_context.Users.Any(u=>u.UserName==user.UserName))
+                if (_context.Users.Any(u => u.UserName == user.UserName))
                 {
                     ModelState.AddModelError("UserName", "Tên tài khoản đã tồn tại.Vui lòng đổi tên khác!");
                 }
