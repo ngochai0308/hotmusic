@@ -322,7 +322,8 @@ namespace HotMusic.Areas.Admin.Controllers
 
         public FileResult ExportCSV()
         {
-            string[] columnNames = new string[] { "SongId", "SongTitle", "Image", "ArtistId", "ArtistName", "CategoryID", "CategoryTitle", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiledBy" };
+            string[] columnNames = new string[] { "Mã bài hát", "Tên bài hát", "Ảnh", "Mã nghệ sĩ", "Tên nghệ sĩ", "Mã thể loại", "Tên thể loại", "Ngày tạo", "Người tạo", "Ngày thay đổi", "Người thay đổi" };
+            
 
             var listSong = _songRepository.GetAll();
             string csv = string.Empty;

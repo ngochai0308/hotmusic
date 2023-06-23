@@ -1,5 +1,5 @@
-Mã Album,Tiêu đề,Ảnh Album,Mã nghệ sĩ,Tên nghệ sĩ,Mã thể loại,Tên thể loại,Ngày tạo,Người tạo,Ngày thay đổi,Người thay đổi,
-1,My Turn,qyxbmkqxxxx.jpg,1,Tóc Tiên,1,Nhạc Trẻ,,,6/19/2023 12:00:00 AM,admin
+AlbumId,AlbumTitle,Thumbnail,ArtistId,ArtistName,CategoryID,CategoryTitle,CreatedDate,CreatedBy,ModifiedDate,ModifiledBy,
+1,My Turn,qyxbmkqx.jpg,1,Tóc Tiên,1,Nhạc Trẻ,,,6/19/2023 12:00:00 AM,admin
 2,Thiếu Nữ,m2e4m5xm.jpg,1,Tóc Tiên,1,Nhạc Trẻ,,,6/19/2023 12:00:00 AM,admin
 3,Nụ Cười Nắng Mai,gon0p4wi.png,1,Tóc Tiên,1,Nhạc Trẻ,,,6/20/2023 12:00:00 AM,admin1
 4,The Best Of Tóc Tiên (2012),a,1,Tóc Tiên,1,Nhạc Trẻ,,,,

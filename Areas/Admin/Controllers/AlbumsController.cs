@@ -321,7 +321,7 @@ namespace HotMusic.Areas.Admin.Controllers
         }
         public FileResult ExportCSV()
         {
-            string[] columnNames = new string[] { "AlbumId", "AlbumTitle", "Thumbnail", "ArtistId", "ArtistName", "CategoryID", "CategoryTitle", "CreatedDate", "CreatedBy", "ModifiedDate", "ModifiledBy" };
+            string[] columnNames = new string[] { "Mã Album", "Tiêu đề", "Ảnh Album", "Mã nghệ sĩ", "Tên nghệ sĩ", "Mã thể loại", "Tên thể loại", "Ngày tạo", "Người tạo", "Ngày thay đổi", "Người thay đổi" };
 
             var listAlbum = _albumRepository.GetAll();
             string csv = string.Empty;
@@ -346,7 +346,7 @@ namespace HotMusic.Areas.Admin.Controllers
                 csv += "\r\n";
             }
             byte[] bytes = Encoding.UTF8.GetBytes(csv);
-            return File(bytes, "text/csv", "album.csv");
+            return File(bytes, "text/csv", "album.txt");
         }
         [HttpPost]
         public IActionResult ImportCSV(IFormFile csvFile)
@@ -368,25 +368,45 @@ namespace HotMusic.Areas.Admin.Controllers
                 HeaderValidated = null,
                 MissingFieldFound=null
             };
+            var listAlbum = _albumRepository.GetAll();
             var reader = new StreamReader(filePath);
             using (var csv = new CsvReader(reader, configuration))
             {
+                csv.Context.RegisterClassMap<AlbumMap>();
                 var records = csv.GetRecords<Albums>();
                 foreach(var record in records)
                 {
+                    bool isExists = false;
+                    foreach(var album in listAlbum)
+                    { 
+                        if (record.AlbumTitle == album.AlbumTitle)
+                        {
+                            isExists = true;
+                            break;
+                        }
+                            
+                    }
                     var newRecord = new Albums
                     {
                         AlbumTitle = record.AlbumTitle,
                         ArtistId = record.ArtistId,
                         CategoryID = record.CategoryID,
-                        CreatedBy = record.CreatedBy,
-                        CreatedDate = record.CreatedDate,
+                        CreatedBy = HttpContext.Session.GetString("UserName"),
+                        CreatedDate = DateTime.Now,
                         Thumbnail = record.Thumbnail,
                         ModifiedDate = record.ModifiedDate,
-                        ModifiledBy = record.ModifiledBy
-
+                        ModifiledBy = record.ModifiledBy,
                     };
-                    _albumRepository.Add(newRecord);
+                    /*isExists == true ? _albumRepository.Update(record) : _albumRepository.Add(record);*/
+                    if (isExists == true)
+                    {
+                        _albumRepository.Update(record);
+                    }
+                    else
+                    {
+                        _albumRepository.Add(newRecord);
+                    }
+
                 }
 
             }
