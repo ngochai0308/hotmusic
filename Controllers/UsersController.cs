@@ -169,7 +169,8 @@ namespace HotMusic.Controllers
                 }
                 if (HashPass.VerifyPassword(user.Password, checkUser.Password))
                 {
-                    checkUser.Password = user.NewPassword;
+                    checkUser.Password = Common.HashPass.HashPassword(user.NewPassword);
+                    _context.SaveChanges();
                     Response.Cookies.Append("Password", user.NewPassword);
                     TempData["StatusMessage"] = "Đổi mật khẩu thành công!";
                     return RedirectToAction("index", "Home");
