@@ -11,6 +11,7 @@ namespace HotMusic.DataModel
             //Dinh nghia 2 key trong bang playlistSong
             modelBuilder.Entity<PlaylistSongs>().HasKey(p => new { p.SongId, p.PlaylistId });
             modelBuilder.Entity<Favourite>().HasKey(f => new { f.SongId, f.UserId });
+            modelBuilder.Entity<AlbumSongs>().HasKey(f => new { f.SongId, f.AlbumId });
         }
 
         public DbSet<Songs> Songs { get; set; }
@@ -23,5 +24,6 @@ namespace HotMusic.DataModel
         public DbSet<Category> Category { get; set; }
         public DbSet<Country> Country { get; set; }
         public DbSet<Lyric> Lyric { get; set; }
+        public DbSet<AlbumSongs> AlbumSongs { get; set; }
     }
 }
