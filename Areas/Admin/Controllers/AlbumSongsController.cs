@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotMusic.DataModel;
+using System.Data.Entity;
+using AutoMapper;
+using HotMusic.Models;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -22,6 +25,27 @@ namespace HotMusic.Areas.Admin.Controllers
         // GET: Admin/AlbumSongs
         public async Task<IActionResult> Index()
         {
+            var listAlbumSong = from als in _context.AlbumSongs
+                                join al in _context.Albums on als.AlbumId equals al.AlbumId
+                                join s in _context.Songs on als.SongId equals s.SongId
+                                select new AlbumSongs()
+                                {
+                                    SongId = als.SongId,
+                                    AlbumId = als.AlbumId,
+                                    SongTitle = s.SongTitle,
+                                    AlbumTitle = al.AlbumTitle,
+                                    CreatedBy = als.CreatedBy,
+                                    CreatedDate = als.CreatedDate,
+                                    ModifiedDate = als.ModifiedDate,
+                                    ModifiledBy = als.ModifiledBy,
+                                    IsDeleted = als.IsDeleted
+                                };
+
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<AlbumSongs, AlbumSongDisplayViewModel>();
+            }).CreateMapper();
+
               return _context.AlbumSongs != null ? 
                           View(await _context.AlbumSongs.ToListAsync()) :
                           Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
