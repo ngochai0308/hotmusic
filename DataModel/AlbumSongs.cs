@@ -6,12 +6,13 @@ namespace HotMusic.DataModel
     [Table("AlbumSong")]
     public class AlbumSongs
     {
+        public int? Id { get; set; }
         public int AlbumId { get; set; }
         public int SongId { get; set; }
         [NotMapped]
-        public string AlbumTitle { get; set; }
+        public string? AlbumTitle { get; set; }
         [NotMapped]
-        public string SongTitle { get; set; }
+        public string? SongTitle { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

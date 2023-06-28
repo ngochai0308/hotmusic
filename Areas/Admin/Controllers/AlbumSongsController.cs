@@ -30,6 +30,7 @@ namespace HotMusic.Areas.Admin.Controllers
                                 join s in _context.Songs on als.SongId equals s.SongId
                                 select new AlbumSongs()
                                 {
+                                    Id = als.Id,
                                     SongId = als.SongId,
                                     AlbumId = als.AlbumId,
                                     SongTitle = s.SongTitle,
@@ -45,10 +46,11 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 config.CreateMap<AlbumSongs, AlbumSongDisplayViewModel>();
             }).CreateMapper();
+            var displayAlbumSong = mapper.Map<IEnumerable<AlbumSongDisplayViewModel>>(listAlbumSong);
 
-              return _context.AlbumSongs != null ? 
-                          View(await _context.AlbumSongs.ToListAsync()) :
-                          Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
+            return _context.AlbumSongs != null ?
+                        View(displayAlbumSong.ToList()) :
+                        Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
         }
 
         // GET: Admin/AlbumSongs/Details/5
@@ -59,52 +61,118 @@ namespace HotMusic.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var albumSongs = await _context.AlbumSongs
-                .FirstOrDefaultAsync(m => m.SongId == id);
+            var albumSongs = (from als in _context.AlbumSongs
+                             join al in _context.Albums on als.AlbumId equals al.AlbumId
+                             join s in _context.Songs on als.SongId equals s.SongId
+                             select new AlbumSongs()
+                             {
+                                 Id = als.Id,
+                                 SongId = als.SongId,
+                                 AlbumId = als.AlbumId,
+                                 SongTitle = s.SongTitle,
+                                 AlbumTitle = al.AlbumTitle,
+                                 CreatedBy = als.CreatedBy,
+                                 CreatedDate = als.CreatedDate,
+                                 ModifiedDate = als.ModifiedDate,
+                                 ModifiledBy = als.ModifiledBy,
+                                 IsDeleted = als.IsDeleted
+                             }).First(m => m.Id == id);
             if (albumSongs == null)
             {
                 return NotFound();
             }
-
-            return View(albumSongs);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<AlbumSongs, AlbumSongDisplayViewModel>();
+            }).CreateMapper();
+            var displayAlbumSong = mapper.Map<AlbumSongDisplayViewModel>(albumSongs);
+            return View(displayAlbumSong);
         }
 
         // GET: Admin/AlbumSongs/Create
         public IActionResult Create()
         {
+            LoadDrop();
             return View();
         }
-
+        public void LoadDrop()
+        {
+            var listSong = from s in _context.Songs
+                           select new SelectListItem()
+                           {
+                               Text = s.SongTitle,
+                               Value = s.SongId.ToString()
+                           };
+            var listAlbum = from al in _context.Albums
+                            select new SelectListItem()
+                            {
+                                Text = al.AlbumTitle,
+                                Value = al.AlbumId.ToString()
+                            };
+            ViewBag.listSong = listSong.ToList();
+            ViewBag.listAlbum = listAlbum.ToList();
+        }
         // POST: Admin/AlbumSongs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AlbumId,SongId,CreatedDate,CreatedBy,ModifiedDate,ModifiledBy,IsDeleted")] AlbumSongs albumSongs)
+        public async Task<IActionResult> Create([Bind("AlbumId,SongId")] AlbumSongDisplayViewModel albumSongs)
         {
+            var userName = HttpContext.Session.GetString("UserName");
             if (ModelState.IsValid)
             {
-                _context.Add(albumSongs);
+                var mapper = new MapperConfiguration(config =>
+                {
+                    config.CreateMap<AlbumSongDisplayViewModel, AlbumSongs>()
+                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => (int?)null))
+                    .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
+                    .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => userName));
+                }).CreateMapper();
+                var newAlbumSongs = mapper.Map<AlbumSongs>(albumSongs);
+                _context.Add(newAlbumSongs);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            LoadDrop();
             return View(albumSongs);
         }
 
         // GET: Admin/AlbumSongs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            LoadDrop();
             if (id == null || _context.AlbumSongs == null)
             {
                 return NotFound();
             }
 
-            var albumSongs = await _context.AlbumSongs.FindAsync(id);
+            var albumSongs = (from als in _context.AlbumSongs
+                              join al in _context.Albums on als.AlbumId equals al.AlbumId
+                              join s in _context.Songs on als.SongId equals s.SongId
+                              select new AlbumSongs()
+                              {
+                                  Id = als.Id,
+                                  SongId = als.SongId,
+                                  AlbumId = als.AlbumId,
+                                  SongTitle = s.SongTitle,
+                                  AlbumTitle = al.AlbumTitle,
+                                  CreatedBy = als.CreatedBy,
+                                  CreatedDate = als.CreatedDate,
+                                  ModifiedDate = als.ModifiedDate,
+                                  ModifiledBy = als.ModifiledBy,
+                                  IsDeleted = als.IsDeleted
+                              }).First(als => als.Id == id);
             if (albumSongs == null)
             {
                 return NotFound();
             }
-            return View(albumSongs);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<AlbumSongs, AlbumSongDisplayViewModel>();
+            }).CreateMapper();
+            var displayAlbumSong = mapper.Map<AlbumSongDisplayViewModel>(albumSongs);
+            return View(displayAlbumSong);
         }
 
         // POST: Admin/AlbumSongs/Edit/5
@@ -112,18 +180,26 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AlbumId,SongId,CreatedDate,CreatedBy,ModifiedDate,ModifiledBy,IsDeleted")] AlbumSongs albumSongs)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,AlbumId,SongId")] AlbumSongDisplayViewModel albumSongs)
         {
-            if (id != albumSongs.SongId)
+            if (id != albumSongs.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                var userName = HttpContext.Session.GetString("UserName");
                 try
                 {
-                    _context.Update(albumSongs);
+                    var mapper = new MapperConfiguration(config =>
+                    {
+                        config.CreateMap<AlbumSongDisplayViewModel, AlbumSongs>()
+                         .ForMember(dest => dest.ModifiledBy, opt => opt.MapFrom(src => DateTime.Now))
+                        .ForMember(dest => dest.ModifiledBy, opt => opt.MapFrom(src => userName));
+                    }).CreateMapper();
+                    var newAlbumSongs = mapper.Map<AlbumSongs>(albumSongs);
+                    _context.Update(newAlbumSongs);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -139,6 +215,7 @@ namespace HotMusic.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            LoadDrop();
             return View(albumSongs);
         }
 
@@ -150,14 +227,32 @@ namespace HotMusic.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var albumSongs = await _context.AlbumSongs
-                .FirstOrDefaultAsync(m => m.SongId == id);
+            var albumSongs = (from als in _context.AlbumSongs
+                             join al in _context.Albums on als.AlbumId equals al.AlbumId
+                             join s in _context.Songs on als.SongId equals s.SongId
+                             select new AlbumSongs()
+                             {
+                                 Id = als.Id,
+                                 SongId = als.SongId,
+                                 AlbumId = als.AlbumId,
+                                 SongTitle = s.SongTitle,
+                                 AlbumTitle = al.AlbumTitle,
+                                 CreatedBy = als.CreatedBy,
+                                 CreatedDate = als.CreatedDate,
+                                 ModifiedDate = als.ModifiedDate,
+                                 ModifiledBy = als.ModifiledBy,
+                                 IsDeleted = als.IsDeleted
+                             }).First(m => m.Id == id);
             if (albumSongs == null)
             {
                 return NotFound();
             }
-
-            return View(albumSongs);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<AlbumSongs, AlbumSongDisplayViewModel>();
+            }).CreateMapper();
+            var displayAlbumSong = mapper.Map<AlbumSongDisplayViewModel>(albumSongs);
+            return View(displayAlbumSong);
         }
 
         // POST: Admin/AlbumSongs/Delete/5
@@ -169,19 +264,19 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 return Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
             }
-            var albumSongs = await _context.AlbumSongs.FindAsync(id);
+            var albumSongs = _context.AlbumSongs.First(a=>a.Id==id);
             if (albumSongs != null)
             {
                 _context.AlbumSongs.Remove(albumSongs);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AlbumSongsExists(int id)
         {
-          return (_context.AlbumSongs?.Any(e => e.SongId == id)).GetValueOrDefault();
+            return (_context.AlbumSongs?.Any(e => e.SongId == id)).GetValueOrDefault();
         }
     }
 }

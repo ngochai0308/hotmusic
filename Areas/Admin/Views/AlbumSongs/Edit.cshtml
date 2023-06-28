@@ -1,4 +1,4 @@
-﻿@model HotMusic.DataModel.AlbumSongs
+﻿@model HotMusic.Models.AlbumSongDisplayViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,34 +13,23 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlbumId" />
-            <input type="hidden" asp-for="SongId" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                <label asp-for="AlbumTitle" class="control-label"></label>
+                <select asp-for="AlbumId" asp-items="@ViewBag.listAlbum" class="form-control">
+                    <option>--Chọn Album---</option>
+                </select>
+                <span asp-validation-for="AlbumId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                <label asp-for="SongTitle" class="control-label"></label>
+                <select asp-for="SongId" asp-items="@ViewBag.listSong" class="form-control">
+                    <option>--Chọn bài hát---</option>
+                </select>
+                <span asp-validation-for="SongId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiledBy" class="control-label"></label>
-                <input asp-for="ModifiledBy" class="form-control" />
-                <span asp-validation-for="ModifiledBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsDeleted" class="control-label"></label>
-                <input asp-for="IsDeleted" class="form-control" />
-                <span asp-validation-for="IsDeleted" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Lưu" class="btn btn-primary" />
             </div>
         </form>
     </div>

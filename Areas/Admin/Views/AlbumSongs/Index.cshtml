@@ -1,10 +1,8 @@
-﻿@model IEnumerable<HotMusic.DataModel.AlbumSongs>
+﻿@model IEnumerable<HotMusic.Models.AlbumSongDisplayViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Danh sách";
 }
-
-<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,6 +10,13 @@
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AlbumTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SongTitle)
+            </th>
+           
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
@@ -24,15 +29,19 @@
             <th>
                 @Html.DisplayNameFor(model => model.ModifiledBy)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SongTitle)
+            </td>
+               
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
@@ -45,13 +54,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.ModifiledBy)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            <td class="col-action">
+                <a asp-action="Edit" asp-route-id="@item.Id"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
+                <a asp-action="Details" asp-route-id="@item.Id"><img width="20" height="20" src="~/img/search.png" /></a>
+                <a asp-action="Delete" asp-route-id="@item.Id"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
             </td>
         </tr>
 }
