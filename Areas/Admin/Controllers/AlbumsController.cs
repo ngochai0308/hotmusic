@@ -348,6 +348,11 @@ namespace HotMusic.Areas.Admin.Controllers
             byte[] bytes = Encoding.UTF8.GetBytes(csv);
             return File(bytes, "text/csv", "album.txt");
         }
+        [Route("/GetFormImportCSV")]
+        public IActionResult GetFormImportCSV()
+        {
+            return PartialView("_ImportCSVPartialView"); 
+        }
         [HttpPost]
         public IActionResult ImportCSV(IFormFile csvFile)
         {
