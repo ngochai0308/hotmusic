@@ -346,7 +346,7 @@ namespace HotMusic.Areas.Admin.Controllers
                 csv += "\r\n";
             }
             byte[] bytes = Encoding.UTF8.GetBytes(csv);
-            return File(bytes, "text/csv", "album.txt");
+            return File(bytes, "text/csv", "album.csv");
         }
         [Route("/GetFormImportCSV")]
         public IActionResult GetFormImportCSV()
@@ -405,6 +405,8 @@ namespace HotMusic.Areas.Admin.Controllers
                     /*isExists == true ? _albumRepository.Update(record) : _albumRepository.Add(record);*/
                     if (isExists == true)
                     {
+                         record.ModifiedDate = DateTime.Now;
+                        record.ModifiledBy = HttpContext.Session.GetString("UserName");
                         _albumRepository.Update(record);
                     }
                     else
