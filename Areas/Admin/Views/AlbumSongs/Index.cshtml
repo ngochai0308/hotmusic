@@ -1,0 +1,65 @@
+﻿@model IEnumerable<HotMusic.Models.AlbumSongDisplayViewModel>
+
+@{
+    ViewData["Title"] = "Danh sách";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AlbumTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SongTitle)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiledBy)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AlbumTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SongTitle)
+            </td>
+               
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiledBy)
+            </td>
+            <td class="col-action">
+                    <a asp-action="Edit" asp-route-idSong="@item.SongId" asp-route-idAlbum="@item.AlbumId"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
+                    <a asp-action="Details" asp-route-idSong="@item.SongId" asp-route-idAlbum="@item.AlbumId"><img width="20" height="20" src="~/img/search.png" /></a>
+                    <a asp-action="Delete" asp-route-idSong="@item.SongId" asp-route-idAlbum="@item.AlbumId"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
