@@ -11,6 +11,7 @@ using System.Security.Claims;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly MusicDbContext _context;

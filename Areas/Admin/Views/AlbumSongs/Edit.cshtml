@@ -1,0 +1,40 @@
+﻿@model HotMusic.Models.AlbumSongDisplayViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>AlbumSongs</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AlbumId" />
+            <div class="form-group">
+                <label asp-for="AlbumTitle" class="control-label"></label>
+                <select asp-for="AlbumId" asp-items="@ViewBag.listAlbum" class="form-control">
+                    <option>--Chọn Album---</option>
+                </select>
+                <span asp-validation-for="AlbumId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SongTitle" class="control-label"></label>
+                <select asp-for="SongId" asp-items="@ViewBag.listSong" class="form-control">
+                    <option>--Chọn bài hát---</option>
+                </select>
+                <span asp-validation-for="SongId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" asp-route-idSong="@Model.SongId" asp-route-idAlbum="@Model.AlbumId" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

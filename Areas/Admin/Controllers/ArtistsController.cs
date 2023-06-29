@@ -10,7 +10,7 @@ using HotMusic.DataModel;
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ArtistsController : Controller
     {
         private readonly IArtistRepository _artistRepository;
