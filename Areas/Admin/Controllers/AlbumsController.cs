@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotMusic.Common;
 using HotMusic.DataModel;
-using System.Data.Entity;
-using HotMusic.Repository;
+using System.Text;
+using CsvHelper;
+using System.Globalization;
+using CsvHelper.Configuration;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AlbumsController : Controller
     {
         private readonly IAlbumRepository _albumRepository;
@@ -192,7 +194,7 @@ namespace HotMusic.Areas.Admin.Controllers
             }
 
             var albums = _albumRepository.GetById(id.Value);
-            
+
             if (albums == null)
             {
                 return NotFound();
@@ -317,10 +319,109 @@ namespace HotMusic.Areas.Admin.Controllers
             _albumRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
-
-        private bool AlbumsExists(int id)
+        public FileResult ExportCSV()
         {
-            return _albumRepository.GetById(id) != null;
+            string[] columnNames = new string[] { "Mã Album", "Tiêu đề", "Ảnh Album", "Mã nghệ sĩ", "Tên nghệ sĩ", "Mã thể loại", "Tên thể loại", "Ngày tạo", "Người tạo", "Ngày thay đổi", "Người thay đổi" };
+
+            var listAlbum = _albumRepository.GetAll();
+            string csv = string.Empty;
+            foreach (var column in columnNames)
+            {
+                csv += column + ",";
+            }
+            csv += "\r\n";
+            foreach (var album in listAlbum)
+            {
+                csv += album.AlbumId+",";
+                csv += album.AlbumTitle + ",";
+                csv += album.Thumbnail + ",";
+                csv += album.ArtistId + ",";
+                csv += album.ArtistName + ",";
+                csv += album.CategoryID + ",";
+                csv += album.CategoryTitle + ",";
+                csv += album.CreatedDate + ",";
+                csv += album.CreatedBy + ",";
+                csv += album.ModifiedDate + ",";                
+                csv += album.ModifiledBy;
+                csv += "\r\n";
+            }
+            byte[] bytes = Encoding.UTF8.GetBytes(csv);
+            return File(bytes, "text/csv", "album.csv");
         }
+        [Route("/GetFormImportCSV")]
+        public IActionResult GetFormImportCSV()
+        {
+            return PartialView("_ImportCSVPartialView"); 
+        }
+        [HttpPost]
+        public IActionResult ImportCSV(IFormFile csvFile)
+        {
+            if (csvFile == null || csvFile.Length == 0)
+            {
+                return BadRequest("No file uploaded");
+            }
+
+            string filePath = Path.Combine("wwwroot", "csv", csvFile.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                csvFile.CopyTo(stream);
+            }
+            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ",",
+                HeaderValidated = null,
+                MissingFieldFound=null
+            };
+            var listAlbum = _albumRepository.GetAll();
+            var reader = new StreamReader(filePath);
+            using (var csv = new CsvReader(reader, configuration))
+            {
+                csv.Context.RegisterClassMap<AlbumMap>();
+                var records = csv.GetRecords<Albums>();
+                foreach(var record in records)
+                {
+                    bool isExists = false;
+                    foreach(var album in listAlbum)
+                    { 
+                        if (record.AlbumTitle == album.AlbumTitle)
+                        {
+                            isExists = true;
+                            break;
+                        }
+                            
+                    }
+                    var newRecord = new Albums
+                    {
+                        AlbumTitle = record.AlbumTitle,
+                        ArtistId = record.ArtistId,
+                        CategoryID = record.CategoryID,
+                        CreatedBy = HttpContext.Session.GetString("UserName"),
+                        CreatedDate = DateTime.Now,
+                        Thumbnail = record.Thumbnail,
+                        ModifiedDate = record.ModifiedDate,
+                        ModifiledBy = record.ModifiledBy,
+                    };
+                    /*isExists == true ? _albumRepository.Update(record) : _albumRepository.Add(record);*/
+                    if (isExists == true)
+                    {
+                         record.ModifiedDate = DateTime.Now;
+                        record.ModifiledBy = HttpContext.Session.GetString("UserName");
+                        _albumRepository.Update(record);
+                    }
+                    else
+                    {
+                        _albumRepository.Add(newRecord);
+                    }
+
+                }
+
+            }
+            return RedirectToAction("Index");
     }
+    private bool AlbumsExists(int id)
+    {
+        return _albumRepository.GetById(id) != null;
+    }
+}
 }

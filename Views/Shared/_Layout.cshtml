@@ -45,7 +45,14 @@
                     </ul>
                     @if (!string.IsNullOrEmpty(Context.Session.GetString("UserName")))
                     {
+<<<<<<< HEAD
                         <p><partial name="_MenuPartial" model="@Context.Session.GetString("UserName")"></partial></p>
+=======
+                        @if (Context.Session.GetString("Role")=="Admin")
+                        {
+                            <a asp-area="admin" asp-action="index" asp-controller="Home"><b>Trang Admin</b></a>
+                        }
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
                         <a class="nav-link text-dark" asp-area="" asp-controller="users" asp-action="logout">Thoát</a>
                     }
                     else

@@ -7,13 +7,35 @@
 
 <h1>Danh sách Album</h1>
 
-<p>
-    <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
-</p>
+<div class="row">
+    <div class="col-3">
+        <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
+    </div>
+    <div class="col-5">
+        
+    </div>
+    <div class="col-4">
+        <a asp-action="ExportCSV" asp-controller="Albums" asp-area="Admin" class="btn btn-info">Xuất file CSV</a>
+        <button type="button" class="btn btn-success" onclick="loadForm()">Nhập File</button>
+
+        <div id="formModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Nhập dữ liệu cho album</h4>
+                        <button type="button" class="close btn btn-danger" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="formContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <form method="get" asp-action="index">
     Nhập từ khóa
     <input type="text" name="filter" value="@ViewData["currentFilter"]" />
-    <input type="submit" value="Tìm kiếm" id="btnSearch" />
+    <input type="submit" value="Tìm kiếm" id="btnSearch" class="btn btn-primary"/>
+   
 </form>
 @if (Model.Count < 0)
 {
@@ -150,5 +172,17 @@ else
        class="btn btn-default @nextDisabled">
         &gt;&gt;
     </a>
+    <script>
+    function loadForm(){
+        $.ajax({
+             url: '/GetFormImportCSV',
+             type: 'GET',
+             success: function(data){
+                  $('#formContainer').html(data);
+                  $('#formModal').modal('show');
+              }
+        });
+    }
+    </script>
 }
 

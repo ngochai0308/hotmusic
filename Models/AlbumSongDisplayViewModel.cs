@@ -4,7 +4,10 @@ namespace HotMusic.Models
 {
     public class AlbumSongDisplayViewModel
     {
+<<<<<<< HEAD
         public int? Id { get; set; }
+=======
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
         [DisplayName("Mã Album")]
         public int AlbumId { get; set; }
         [DisplayName("Mã bài hát")]

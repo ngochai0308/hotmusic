@@ -13,7 +13,10 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlbumId" />
+<<<<<<< HEAD
             <input type="hidden" asp-for="Id" />
+=======
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
             <div class="form-group">
                 <label asp-for="AlbumTitle" class="control-label"></label>
                 <select asp-for="AlbumId" asp-items="@ViewBag.listAlbum" class="form-control">
@@ -29,7 +32,11 @@
                 <span asp-validation-for="SongId" class="text-danger"></span>
             </div>
             <div class="form-group">
+<<<<<<< HEAD
                 <input type="submit" value="Lưu" class="btn btn-primary" />
+=======
+                <input type="submit" asp-route-idSong="@Model.SongId" asp-route-idAlbum="@Model.AlbumId" value="Lưu" class="btn btn-primary" />
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
             </div>
         </form>
     </div>

@@ -8,11 +8,13 @@ using HotMusic.DataModel;
 using System.Net.Http;
 using HotMusic.Contract;
 using AutoMapper;
+using HotMusic.Repository;
+using System.Text;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SongsController : Controller
     {
         private readonly ISongRepository _songRepository;
@@ -316,6 +318,37 @@ namespace HotMusic.Areas.Admin.Controllers
         private bool SongsExists(int id)
         {
             return _songRepository.GetById(id) != null;
+        }
+
+        public FileResult ExportCSV()
+        {
+            string[] columnNames = new string[] { "Mã bài hát", "Tên bài hát", "Ảnh", "Mã nghệ sĩ", "Tên nghệ sĩ", "Mã thể loại", "Tên thể loại", "Ngày tạo", "Người tạo", "Ngày thay đổi", "Người thay đổi" };
+            
+
+            var listSong = _songRepository.GetAll();
+            string csv = string.Empty;
+            foreach (var column in columnNames)
+            {
+                csv += column + ",";
+            }
+            csv += "\r\n";
+            foreach (var song in listSong)
+            {
+                csv += song.SongId.ToString().Replace(",", ";") + ',';
+                csv += song.SongTitle.Replace(",", ";") + ',';
+                csv += song.Image?.Replace(",", ";") + ',';
+                csv += song.ArtistId.ToString().Replace(",", ";") + ',';
+                csv += song.ArtistName?.Replace(",", ";") + ',';
+                csv += song.CategoryId.ToString().Replace(",", ";") + ',';
+                csv += song.CategoryTitle?.Replace(",", ";") + ',';
+                csv += song.CreatedDate?.ToString().Replace(",", ";") + ',';
+                csv += song.CreatedBy?.Replace(",", ";") + ',';
+                csv += song.ModifiedDate?.ToString().Replace(",", ";") + ',';
+                csv += song.ModifiledBy?.Replace(",", ";") + ',';
+                csv += "\r\n";
+            }
+            byte[] bytes = Encoding.UTF8.GetBytes(csv);
+            return File(bytes, "text/csv", "song.csv");
         }
     }
 }

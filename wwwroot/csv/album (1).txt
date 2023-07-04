@@ -1,0 +1,20 @@
+Mã Album,Tiêu đề,Ảnh Album,Mã nghệ sĩ,Tên nghệ sĩ,Mã thể loại,Tên thể loại,Ngày tạo,Người tạo,Ngày thay đổi,Người thay đổi,
+1,My Turn,qyxbmkqxxxx.jpg,1,Tóc Tiên,1,Nhạc Trẻ,,,6/19/2023 12:00:00 AM,admin
+2,Thiếu Nữ,m2e4m5xm.jpg,1,Tóc Tiên,1,Nhạc Trẻ,,,6/19/2023 12:00:00 AM,admin
+3,Nụ Cười Nắng Mai,gon0p4wi.png,1,Tóc Tiên,1,Nhạc Trẻ,,,6/20/2023 12:00:00 AM,admin1
+4,The Best Of Tóc Tiên (2012),a,1,Tóc Tiên,1,Nhạc Trẻ,,,,
+5,Top Songs: Tóc Tiên,a,1,Tóc Tiên,1,Nhạc Trẻ,,,,
+6,Top Songs: Ali Hoàng Dương,a,2,Ali Hoàng Dương,1,Nhạc Trẻ,,,,
+7,Để Kể Cho Nghe Episode 6: Ali Hoàng Dương,a,2,Ali Hoàng Dương,1,Nhạc Trẻ,,,,
+8,Ô Kìa Mùa Xuân Vui (Single),a,2,Ali Hoàng Dương,1,Nhạc Trẻ,,,,
+9,Love You Hate You,a,3,Hari Won,1,Nhạc Trẻ,,,,
+10,Khóc (Single),a,3,Hari Won,1,Nhạc Trẻ,,,,
+11,Top Songs: Hari Won,a,3,Hari Won,1,Nhạc Trẻ,,,,
+12,Hương Đêm Bay Xa (Single) ,a,3,Hari Won,1,Nhạc Trẻ,,,,
+13,Hành Trình Trở Thành Quán Quân Hòa Âm Ánh Sáng,a,4,Noo Phước Thịnh,1,Nhạc Trẻ,,,,
+14,cơn mưa băng giá (Single) ,a,4,Noo Phước Thịnh,1,Nhạc Trẻ,,,,
+15,Lặng thầm (Single),a,4,Noo Phước Thịnh,1,Nhạc Trẻ,,,,
+16,Ngày Hạnh Phúc ,a,5,Ðan Trường,1,Nhạc Trẻ,,,,
+17,Tình Khúc Vàng,a,5,Ðan Trường,1,Nhạc Trẻ,,,,
+18,Liên Khúc Đan Trường Remix Hay Nhất 2014,a,5,Ðan Trường,1,Nhạc Trẻ,,,,
+19,Đừng Nói Lần Hai,a,7,Kiddie,4,Rap Việt,,,,

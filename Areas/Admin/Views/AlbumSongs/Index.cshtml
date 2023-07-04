@@ -55,9 +55,15 @@
                 @Html.DisplayFor(modelItem => item.ModifiledBy)
             </td>
             <td class="col-action">
+<<<<<<< HEAD
                 <a asp-action="Edit" asp-route-id="@item.Id"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
                 <a asp-action="Details" asp-route-id="@item.Id"><img width="20" height="20" src="~/img/search.png" /></a>
                 <a asp-action="Delete" asp-route-id="@item.Id"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
+=======
+                    <a asp-action="Edit" asp-route-idSong="@item.SongId" asp-route-idAlbum="@item.AlbumId"><img width="20" height="20" src="~/img/edit - copy.ico" /></a>
+                    <a asp-action="Details" asp-route-idSong="@item.SongId" asp-route-idAlbum="@item.AlbumId"><img width="20" height="20" src="~/img/search.png" /></a>
+                    <a asp-action="Delete" asp-route-idSong="@item.SongId" asp-route-idAlbum="@item.AlbumId"><img width="20" height="20" src="~/img/icon-32-delete.png" /></a>
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
             </td>
         </tr>
 }
