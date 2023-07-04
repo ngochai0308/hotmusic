@@ -53,12 +53,9 @@ namespace HotMusic.Controllers
         private void SaveUserInfoToSession(Users user)
         {
             HttpContext.Session.SetString("UserName", user.UserName);
-<<<<<<< HEAD
             HttpContext.Session.SetInt32("Id", user.UserId);
 
-=======
             HttpContext.Session.SetString("Role", user.Role??"User");
->>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
         }
 
         /// <summary>
@@ -91,13 +88,8 @@ namespace HotMusic.Controllers
                 {
                     if (HashPass.VerifyPassword(user.Password, checkUser.Password))
                     {
-<<<<<<< HEAD
                         SaveUserInfoToSession(checkUser);
 
-=======
-                        // Save to session
-                        SaveUserInfoToSession(checkUser);
->>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
                         // Cookie
                         if (user.IsRememberMe)
                         {

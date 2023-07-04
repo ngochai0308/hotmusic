@@ -6,10 +6,6 @@ namespace HotMusic.DataModel
     [Table("AlbumSong")]
     public class AlbumSongs
     {
-<<<<<<< HEAD
-        public int? Id { get; set; }
-=======
->>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
         public int AlbumId { get; set; }
         public int SongId { get; set; }
         [NotMapped]

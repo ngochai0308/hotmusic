@@ -30,7 +30,6 @@ namespace HotMusic.Areas.Admin.Controllers
                                 join s in _context.Songs on als.SongId equals s.SongId
                                 select new AlbumSongs()
                                 {
-                                    Id = als.Id,
                                     SongId = als.SongId,
                                     AlbumId = als.AlbumId,
                                     SongTitle = s.SongTitle,
@@ -66,7 +65,6 @@ namespace HotMusic.Areas.Admin.Controllers
                              join s in _context.Songs on als.SongId equals s.SongId
                              select new AlbumSongs()
                              {
-                                 Id = als.Id,
                                  SongId = als.SongId,
                                  AlbumId = als.AlbumId,
                                  SongTitle = s.SongTitle,
@@ -76,7 +74,7 @@ namespace HotMusic.Areas.Admin.Controllers
                                  ModifiedDate = als.ModifiedDate,
                                  ModifiledBy = als.ModifiledBy,
                                  IsDeleted = als.IsDeleted
-                             }).First(m => m.Id == id);
+                             }).First();
             if (albumSongs == null)
             {
                 return NotFound();
@@ -125,7 +123,6 @@ namespace HotMusic.Areas.Admin.Controllers
                 var mapper = new MapperConfiguration(config =>
                 {
                     config.CreateMap<AlbumSongDisplayViewModel, AlbumSongs>()
-                    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => (int?)null))
                     .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
                     .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => userName));
                 }).CreateMapper();
@@ -152,7 +149,6 @@ namespace HotMusic.Areas.Admin.Controllers
                               join s in _context.Songs on als.SongId equals s.SongId
                               select new AlbumSongs()
                               {
-                                  Id = als.Id,
                                   SongId = als.SongId,
                                   AlbumId = als.AlbumId,
                                   SongTitle = s.SongTitle,
@@ -162,7 +158,7 @@ namespace HotMusic.Areas.Admin.Controllers
                                   ModifiedDate = als.ModifiedDate,
                                   ModifiledBy = als.ModifiledBy,
                                   IsDeleted = als.IsDeleted
-                              }).First(als => als.Id == id);
+                              }).First();
             if (albumSongs == null)
             {
                 return NotFound();
@@ -182,7 +178,7 @@ namespace HotMusic.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,AlbumId,SongId")] AlbumSongDisplayViewModel albumSongs)
         {
-            if (id != albumSongs.Id)
+            if (id != albumSongs.SongId)
             {
                 return NotFound();
             }
@@ -232,7 +228,6 @@ namespace HotMusic.Areas.Admin.Controllers
                              join s in _context.Songs on als.SongId equals s.SongId
                              select new AlbumSongs()
                              {
-                                 Id = als.Id,
                                  SongId = als.SongId,
                                  AlbumId = als.AlbumId,
                                  SongTitle = s.SongTitle,
@@ -242,7 +237,7 @@ namespace HotMusic.Areas.Admin.Controllers
                                  ModifiedDate = als.ModifiedDate,
                                  ModifiledBy = als.ModifiledBy,
                                  IsDeleted = als.IsDeleted
-                             }).First(m => m.Id == id);
+                             }).First();
             if (albumSongs == null)
             {
                 return NotFound();
@@ -264,7 +259,7 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 return Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
             }
-            var albumSongs = _context.AlbumSongs.First(a=>a.Id==id);
+            var albumSongs = _context.AlbumSongs.First();
             if (albumSongs != null)
             {
                 _context.AlbumSongs.Remove(albumSongs);

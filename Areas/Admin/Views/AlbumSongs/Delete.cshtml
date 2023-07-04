@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿@model HotMusic.DataModel.AlbumSongs
-=======
-﻿@model HotMusic.Models.AlbumSongDisplayViewModel
->>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
+@model HotMusic.Models.AlbumSongDisplayViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -56,11 +52,8 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="AlbumId" />
         <input type="hidden" asp-for="SongId" />
-<<<<<<< HEAD
-        <input type="submit" asp-route-id="@Model.Id" value="Delete" class="btn btn-danger" /> |
-=======
+
         <input type="submit" asp-route-idSong="@Model.SongId" asp-route-idAlbum="@Model.AlbumId" value="Delete" class="btn btn-danger" /> |
->>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
         <a asp-action="Index">Back to List</a>
     </form>
 </div>
