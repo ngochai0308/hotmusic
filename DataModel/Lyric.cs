@@ -8,12 +8,9 @@ namespace HotMusic.DataModel
     {
         [Key]
         public int Id { get; set; }
-        public string lyric { get; set; }
+        public string lyricc { get; set; }
         public int SongId { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string? ModifiledBy { get; set; }
-        public bool? IsDeleted { get; set; }
+        [NotMapped]
+        public string SongTitle { get; set; }
     }
 }

@@ -1,0 +1,37 @@
+﻿@model HotMusic.Models.LyricDisplayViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Lyric</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SongId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SongId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SongTitle)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SongTitle)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.lyricc)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.lyricc)
+        </dd>
+       
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Chỉnh sửa</a> |
+    <a asp-action="Index">Trở về danh sách</a>
+</div>

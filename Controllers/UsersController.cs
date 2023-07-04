@@ -53,7 +53,12 @@ namespace HotMusic.Controllers
         private void SaveUserInfoToSession(Users user)
         {
             HttpContext.Session.SetString("UserName", user.UserName);
+<<<<<<< HEAD
+            HttpContext.Session.SetInt32("Id", user.UserId);
+
+=======
             HttpContext.Session.SetString("Role", user.Role??"User");
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
         }
 
         /// <summary>
@@ -86,8 +91,13 @@ namespace HotMusic.Controllers
                 {
                     if (HashPass.VerifyPassword(user.Password, checkUser.Password))
                     {
+<<<<<<< HEAD
+                        SaveUserInfoToSession(checkUser);
+
+=======
                         // Save to session
                         SaveUserInfoToSession(checkUser);
+>>>>>>> 1f9e9255cc503a3619dba5c2a37cf3fefe559c4c
                         // Cookie
                         if (user.IsRememberMe)
                         {
@@ -146,6 +156,42 @@ namespace HotMusic.Controllers
 
             // Ở nguyên trang hiện tại
             return View(user);
+        }
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ChangePassword(int? id, [Bind("Password", "NewPassword", "ConfirmPassword")]ChangePasswordViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    return Content("Không tìm thấy người dùng do id null");
+                }
+                var checkUser = _context.Users.FirstOrDefault(u=>u.UserId==id);
+                if (checkUser == null)
+                {
+                    return Content("Không tìm thấy người dùng");
+                }
+                if (HashPass.VerifyPassword(user.Password, checkUser.Password))
+                {
+                    checkUser.Password = Common.HashPass.HashPassword(user.NewPassword);
+                    _context.SaveChanges();
+                    Response.Cookies.Append("Password", user.NewPassword);
+                    TempData["StatusMessage"] = "Đổi mật khẩu thành công!";
+                    return RedirectToAction("index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("Password", "Mật khẩu nhập không đúng");
+                }
+                TempData["StatusMessage"] = "Mật khẩu nhập không đúng vui lòng nhập lại!";
+            }
+            
+
+            return View();
         }
 
         [AllowAnonymous]
