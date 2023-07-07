@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "_LayoutHomePage";
+    var UserName = Context.Session.GetString("UserName") as string;
+}
+<body>
+    <div class="top-tab-right">
+        <button class="btn-previous">
+            <svg role="img" height="16" width="16" aria-hidden="true"
+                 class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16" data-encore-id="icon">
+                <path d="M11.03.47a.75.75 0 0 1 0 1.06L4.56 8l6.47 6.47a.75.75 0 1 1-1.06 1.06L2.44 8 9.97.47a.75.75 0 0 1 1.06 0z"></path>
+            </svg>
+        </button>
+        <button>
+            <svg role="img" height="16" width="16" aria-hidden="true" class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16"
+                 data-encore-id="icon">
+                <path d="M4.97.47a.75.75 0 0 0 0 1.06L11.44 8l-6.47 6.47a.75.75 0 1 0 1.06 1.06L13.56 8 6.03.47a.75.75 0 0 0-1.06 0z"></path>
+            </svg>
+        </button>
+        @*<div class="">
+            <span class="input-group-text" id="basic-addon1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                </svg>
+            </span>
+            <input type="text" class="rounded-2 form-control" placeholder="Bạn muốn nghe gì?">
+        </div>*@
+        @if (string.IsNullOrEmpty(UserName))
+        {
+            <div class="login-top-tab">
+                <a class="btn-singup" asp-action="Register" asp-controller="Users">Sign up</a>
+                <a class="btn-login" asp-action="Login" asp-controller="Users">Log in</a>
+            </div>
+        }
+        else
+        {
+            <div style="float:right;height:20px">
+                <partial name="_MenuPartial" model="@UserName"></partial>
+            </div>
+
+        }
+    </div>
+    <h2>Đây là page Search</h2>
+</body>
+

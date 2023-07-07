@@ -1,37 +1,37 @@
-﻿@model IEnumerable<HotMusic.DataModel.Category>
+﻿@model HotMusic.Common.PaginatedList<HotMusic.Models.CategoryDisplayViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Danh sách";
 }
 
-<h1>Index</h1>
-
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm mới</a>
 </p>
+<form method="get" asp-action="index">
+    Nhập từ khóa
+    <input type="text" name="keyword" value="@ViewData["currentFilter"]" />
+    <input type="submit" value="Tìm kiếm" id="btnSearch" class="btn btn-primary" />
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CategoryTitle)
+                @Html.DisplayNameFor(model => model.First().CategoryTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CountryId)
+                @Html.DisplayNameFor(model => model.First().CountryTitle)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
+                @Html.DisplayNameFor(model => model.First().CreatedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
+                @Html.DisplayNameFor(model => model.First().CreatedBy)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
+                @Html.DisplayNameFor(model => model.First().ModifiedDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ModifiledBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDeleted)
+                @Html.DisplayNameFor(model => model.First().ModifiledBy)
             </th>
             <th></th>
         </tr>
@@ -43,7 +43,7 @@
                 @Html.DisplayFor(modelItem => item.CategoryTitle)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CountryId)
+                @Html.DisplayFor(modelItem => item.CountryTitle)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
@@ -58,14 +58,13 @@
                 @Html.DisplayFor(modelItem => item.ModifiledBy)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsDeleted)
-            </td>
-            <td>
                 <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
             </td>
         </tr>
 }
+
     </tbody>
 </table>
+<partial name="_PagintedPartial" model="@Model"></partial>

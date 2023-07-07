@@ -5,16 +5,44 @@
 @{
     ViewData["Title"] = "Danh sách bài hát";
 }
-
+<script>
+    function loadForm() {
+        $.ajax({
+            url: '/ImportCSVForSong',
+            Type: 'GET',
+            success: function (data) {
+                $('#formContainer').html(data);
+                $('#formModal').modal('show');
+            }
+        });
+    }
+</script>
 <h1>Danh sách bài hát</h1>
 
-<p>
-    <a asp-action="Create">
-        <img width="20" height="20" src="~/img/addnew.png" />
-        Thêm mới
-    </a>
-</p>
-<a asp-action="ExportCSV" asp-controller="songs">xuất file</a>
+<div class="row">
+    <div class="col-3">
+        <a asp-action="Create"><img width="20" height="20" src="~/img/addnew.png" />Thêm mới</a>
+    </div>
+    <div class="col-5">
+    </div>
+    <div class="col-4">
+        <a asp-action="ExportCSV" asp-controller="Songs" asp-area="Admin" class="btn btn-info">Xuất file CSV</a>
+        <button type="button" class="btn btn-success" onclick="loadForm()">Nhập File</button>
+
+        <div id="formModal" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Nhập dữ liệu cho song</h4>
+                        <button type="button" class="close btn btn-danger" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body" id="formContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <form method="get" asp-action="index">
     <span>Nhập từ khóa</span>
     <input type="text" name="filter" value="@ViewData["filter"]" />
@@ -166,8 +194,10 @@
    class="btn btn-default @nextDisabled">
         Next
     </a>
+
 }
 else
 {
     <h2>Không có dữ liệu</h2>
 }
+

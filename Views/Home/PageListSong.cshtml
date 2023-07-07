@@ -1,0 +1,10 @@
+﻿@using HotMusic.DataModel;
+@{
+    var Album = ViewData["Album"] as Albums;
+    var listSong = ViewData["listSongg"] as IEnumerable<Songs>;
+}
+<h3>Các bài hát trong Album: @Album.AlbumTitle</h3>
+@foreach(var Song in listSong)
+{
+    <span>@Song.SongTitle</span><br />
+}

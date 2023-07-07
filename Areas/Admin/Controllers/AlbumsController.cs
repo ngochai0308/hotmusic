@@ -11,6 +11,7 @@ using System.Text;
 using CsvHelper;
 using System.Globalization;
 using CsvHelper.Configuration;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -37,7 +38,7 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 filter = string.Empty;
             }
-            ViewData["filter"] = filter;
+            ViewData["currentFilter"] = filter;
 
             if (string.IsNullOrEmpty(sortOrder))
             {
@@ -348,10 +349,10 @@ namespace HotMusic.Areas.Admin.Controllers
             byte[] bytes = Encoding.UTF8.GetBytes(csv);
             return File(bytes, "text/csv", "album.csv");
         }
-        [Route("/GetFormImportCSV")]
+        [Route("/ImportCSVForAlbum")]
         public IActionResult GetFormImportCSV()
         {
-            return PartialView("_ImportCSVPartialView"); 
+            return PartialView("_ImportCSVAlbumPartialView"); 
         }
         [HttpPost]
         public IActionResult ImportCSV(IFormFile csvFile)
@@ -391,19 +392,8 @@ namespace HotMusic.Areas.Admin.Controllers
                         }
                             
                     }
-                    var newRecord = new Albums
-                    {
-                        AlbumTitle = record.AlbumTitle,
-                        ArtistId = record.ArtistId,
-                        CategoryID = record.CategoryID,
-                        CreatedBy = HttpContext.Session.GetString("UserName"),
-                        CreatedDate = DateTime.Now,
-                        Thumbnail = record.Thumbnail,
-                        ModifiedDate = record.ModifiedDate,
-                        ModifiledBy = record.ModifiledBy,
-                    };
                     /*isExists == true ? _albumRepository.Update(record) : _albumRepository.Add(record);*/
-                    if (isExists == true)
+                    if (isExists)
                     {
                          record.ModifiedDate = DateTime.Now;
                         record.ModifiledBy = HttpContext.Session.GetString("UserName");
@@ -411,6 +401,15 @@ namespace HotMusic.Areas.Admin.Controllers
                     }
                     else
                     {
+                        var newRecord = new Albums
+                        {
+                            AlbumTitle = record.AlbumTitle,
+                            ArtistId = record.ArtistId,
+                            CategoryID = record.CategoryID,
+                            CreatedBy = HttpContext.Session.GetString("UserName"),
+                            CreatedDate = DateTime.Now,
+                            Thumbnail = record.Thumbnail,
+                        };
                         _albumRepository.Add(newRecord);
                     }
 

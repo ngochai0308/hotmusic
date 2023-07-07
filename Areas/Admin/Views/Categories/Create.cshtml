@@ -1,12 +1,9 @@
-﻿@model HotMusic.DataModel.Category
-
+﻿@model HotMusic.Models.CategoryDisplayViewModel
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Category</h4>
+<h1>Thêm mới thế loại</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,34 +15,11 @@
                 <span asp-validation-for="CategoryTitle" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <input asp-for="CountryId" class="form-control" />
+                <label asp-for="CountryTitle" class="control-label"></label>
+                <select asp-for="CountryId" asp-items="@ViewBag.listCountry" class="form-control">
+                    <option>--Chọn quốc gia--</option>
+                </select>
                 <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiledBy" class="control-label"></label>
-                <input asp-for="ModifiledBy" class="form-control" />
-                <span asp-validation-for="ModifiledBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsDeleted" class="control-label"></label>
-                <input asp-for="IsDeleted" class="form-control" />
-                <span asp-validation-for="IsDeleted" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HotMusic.DataModel;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using HotMusic.Models;
+using HotMusic.Common;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -22,10 +25,31 @@ namespace HotMusic.Areas.Admin.Controllers
         }
 
         // GET: Admin/Categories
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? PageNumber,string? keyword)
         {
+            keyword ??= string.Empty;
+            ViewData["currentFilter"] = keyword;
+            var listCategory = (from cate in _context.Category
+                     join coun in _context.Country on cate.CountryId equals coun.CountryId
+                     select new Category()
+                     {
+                         CategoryId = cate.CategoryId,
+                         CategoryTitle = cate.CategoryTitle,
+                         CountryId = cate.CountryId,
+                         CountryTitle = coun.CountryName,
+                         CreatedBy = cate.CreatedBy,
+                         CreatedDate = cate.CreatedDate,
+                         ModifiledBy = cate.ModifiledBy,
+                         ModifiedDate = cate.ModifiedDate,
+                         IsDeleted = cate.IsDeleted
+                     }).Where(ca=>ca.CategoryTitle.Contains(keyword));
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Category,CategoryDisplayViewModel>();
+            }).CreateMapper();
+            var listCategoryDisplay = mapper.Map<IEnumerable<CategoryDisplayViewModel>>(listCategory);
               return _context.Category != null ? 
-                          View(await _context.Category.ToListAsync()) :
+                          View(await PaginatedList<CategoryDisplayViewModel>.CreateAsync(listCategoryDisplay,PageNumber??1,5)) :
                           Problem("Entity set 'MusicDbContext.Category'  is null.");
         }
 
@@ -37,19 +61,47 @@ namespace HotMusic.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = (from cate in _context.Category
+                            join coun in _context.Country on cate.CountryId equals coun.CountryId
+                            select new Category()
+                            {
+                                CategoryId = cate.CategoryId,
+                                CategoryTitle = cate.CategoryTitle,
+                                CountryId = cate.CountryId,
+                                CountryTitle = coun.CountryName,
+                                CreatedBy = cate.CreatedBy,
+                                CreatedDate = cate.CreatedDate,
+                                ModifiledBy = cate.ModifiledBy,
+                                ModifiedDate = cate.ModifiedDate,
+                                IsDeleted = cate.IsDeleted
+                            }).FirstOrDefault(m => m.CategoryId == id);
+
             if (category == null)
             {
                 return NotFound();
             }
-
-            return View(category);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Category, CategoryDisplayViewModel>();
+            }).CreateMapper();
+            var CategoryDisplay = mapper.Map<CategoryDisplayViewModel>(category);
+            return View(CategoryDisplay);
+        }
+        public void LoadCountrySelectList()
+        {
+            var listCountry = from c in _context.Country
+                              select new SelectListItem()
+                              {
+                                  Value = c.CountryId.ToString(),
+                                  Text = c.CountryName
+                              };
+            ViewBag.listCountry = listCountry.ToList();
         }
 
         // GET: Admin/Categories/Create
         public IActionResult Create()
         {
+            LoadCountrySelectList();
             return View();
         }
 
@@ -58,14 +110,23 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CategoryId,CategoryTitle,CountryId,CreatedDate,CreatedBy,ModifiedDate,ModifiledBy,IsDeleted")] Category category)
+        public async Task<IActionResult> Create([Bind("CategoryId,CategoryTitle,CountryId")] CategoryDisplayViewModel category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                var userName = HttpContext.Session.GetString("UserName");
+                var mapper = new MapperConfiguration(config =>
+                {
+                    config.CreateMap<CategoryDisplayViewModel, Category>()
+                    .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => DateTime.Now))
+                    .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => userName));
+                }).CreateMapper();
+                var newCategory = mapper.Map<Category>(category);
+                _context.Add(newCategory);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            LoadCountrySelectList();
             return View(category);
         }
 
@@ -76,13 +137,31 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
-            var category = await _context.Category.FindAsync(id);
+            LoadCountrySelectList();
+            var category = (from cate in _context.Category
+                            join coun in _context.Country on cate.CountryId equals coun.CountryId
+                            select new Category()
+                            {
+                                CategoryId = cate.CategoryId,
+                                CategoryTitle = cate.CategoryTitle,
+                                CountryId = cate.CountryId,
+                                CountryTitle = coun.CountryName,
+                                CreatedBy = cate.CreatedBy,
+                                CreatedDate = cate.CreatedDate,
+                                ModifiledBy = cate.ModifiledBy,
+                                ModifiedDate = cate.ModifiedDate,
+                                IsDeleted = cate.IsDeleted
+                            }).First(c=>c.CategoryId==id);
             if (category == null)
             {
                 return NotFound();
             }
-            return View(category);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Category, CategoryDisplayViewModel>();
+            }).CreateMapper();
+            var CategoryDisplay = mapper.Map<CategoryDisplayViewModel>(category);
+            return View(CategoryDisplay);
         }
 
         // POST: Admin/Categories/Edit/5
@@ -90,7 +169,7 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryTitle,CountryId,CreatedDate,CreatedBy,ModifiedDate,ModifiledBy,IsDeleted")] Category category)
+        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,CategoryTitle,CountryId")] CategoryDisplayViewModel category)
         {
             if (id != category.CategoryId)
             {
@@ -99,9 +178,17 @@ namespace HotMusic.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var userName = HttpContext.Session.GetString("UserName");
                 try
                 {
-                    _context.Update(category);
+                    var mapper = new MapperConfiguration(config =>
+                    {
+                        config.CreateMap<CategoryDisplayViewModel,Category>()
+                         .ForMember(dest => dest.ModifiedDate, opt => opt.MapFrom(src => DateTime.Now))
+                        .ForMember(dest => dest.ModifiledBy, opt => opt.MapFrom(src => userName));
+                    }).CreateMapper();
+                    var NewCategory = mapper.Map<Category>(category);
+                    _context.Update(NewCategory);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -117,6 +204,7 @@ namespace HotMusic.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            LoadCountrySelectList();
             return View(category);
         }
 
@@ -128,14 +216,30 @@ namespace HotMusic.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Category
-                .FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = (from cate in _context.Category
+                            join coun in _context.Country on cate.CountryId equals coun.CountryId
+                            select new Category()
+                            {
+                                CategoryId = cate.CategoryId,
+                                CategoryTitle = cate.CategoryTitle,
+                                CountryId = cate.CountryId,
+                                CountryTitle = coun.CountryName,
+                                CreatedBy = cate.CreatedBy,
+                                CreatedDate = cate.CreatedDate,
+                                ModifiledBy = cate.ModifiledBy,
+                                ModifiedDate = cate.ModifiedDate,
+                                IsDeleted = cate.IsDeleted
+                            }).FirstOrDefault(m => m.CategoryId == id);
             if (category == null)
             {
                 return NotFound();
             }
-
-            return View(category);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Category, CategoryDisplayViewModel>();
+            }).CreateMapper();
+            var CategoryDisplay = mapper.Map<CategoryDisplayViewModel>(category);
+            return View(CategoryDisplay);
         }
 
         // POST: Admin/Categories/Delete/5

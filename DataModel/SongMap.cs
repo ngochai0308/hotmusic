@@ -12,6 +12,7 @@ namespace HotMusic.DataModel
             Map(s => s.ArtistName).Name("Tên nghệ sĩ");
             Map(s => s.CategoryId).Name("Mã thể loại");
             Map(s => s.CategoryTitle).Name("Tên thể loại");
+            Map(s => s.SongUrl).Name("Song url");
             Map(s => s.CreatedDate).Name("Ngày tạo");
             Map(s => s.CreatedBy).Name("Người tạo");
             Map(s => s.ModifiedDate).Name("Ngày thay đổi");

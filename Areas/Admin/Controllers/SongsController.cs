@@ -10,6 +10,9 @@ using HotMusic.Contract;
 using AutoMapper;
 using HotMusic.Repository;
 using System.Text;
+using CsvHelper.Configuration;
+using System.Globalization;
+using CsvHelper;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -319,10 +322,76 @@ namespace HotMusic.Areas.Admin.Controllers
         {
             return _songRepository.GetById(id) != null;
         }
+        [Route("/ImportCSVForSong")]
+        public IActionResult GetFormImportCSV()
+        {
+            return PartialView("_ImportCSVSongPartialView");
+        }
+        public IActionResult ImportCSV(IFormFile csvFile)
+        {
+            if(csvFile == null || csvFile.Length == 0)
+            {
+                return BadRequest("No file upladed");
+            }
+            string filePath = Path.Combine("wwwroot", "csv", csvFile.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                csvFile.CopyTo(stream);
+            }
+            var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ",",
+                HeaderValidated = null,
+                MissingFieldFound = null
+            };
+            var listSong = _songRepository.GetAll();
+            var reader = new StreamReader(filePath);
+            using (var csv = new CsvReader(reader,configuration))
+            {
+                csv.Context.RegisterClassMap<SongMap>();
+                var records = csv.GetRecords<Songs>();
+                foreach(var record in records)
+                {
+                    bool isExists = false;
+                    foreach(var song in listSong)
+                    {
+                        if(record.SongTitle == song.SongTitle)
+                        {
+                            isExists = true;
+                            break;
+                        }
+                    }
+                    if (isExists)
+                    {
+                        record.ModifiedDate = DateTime.Now;
+                        record.ModifiledBy = HttpContext.Session.GetString("UserName");
+                        _songRepository.Update(record);
+                    }
+                    else
+                    {
+                        var newRecord = new Songs()
+                        {
+                            ArtistId = record.ArtistId,
+                            CategoryId = record.ArtistId,
+                            CreatedBy = HttpContext.Session.GetString("UserName"),
+                            SongUrl = record.SongUrl,
+                            CreatedDate = DateTime.Now,
+                            Image = record.Image,
+                            SongTitle = record.SongTitle,
+                            ViewCount = record.ViewCount,
+                        };
+                        _songRepository.Add(newRecord);
+                    }
+                }
+                
+            }
+            return RedirectToAction("Index");
+        }
 
         public FileResult ExportCSV()
         {
-            string[] columnNames = new string[] { "Mã bài hát", "Tên bài hát", "Ảnh", "Mã nghệ sĩ", "Tên nghệ sĩ", "Mã thể loại", "Tên thể loại", "Ngày tạo", "Người tạo", "Ngày thay đổi", "Người thay đổi" };
+            string[] columnNames = new string[] { "Mã bài hát", "Tên bài hát", "Ảnh", "Mã nghệ sĩ", "Tên nghệ sĩ", "Mã thể loại", "Tên thể loại","Song url","Ngày tạo", "Người tạo", "Ngày thay đổi", "Người thay đổi" };
             
 
             var listSong = _songRepository.GetAll();
@@ -334,17 +403,18 @@ namespace HotMusic.Areas.Admin.Controllers
             csv += "\r\n";
             foreach (var song in listSong)
             {
-                csv += song.SongId.ToString().Replace(",", ";") + ',';
-                csv += song.SongTitle.Replace(",", ";") + ',';
-                csv += song.Image?.Replace(",", ";") + ',';
-                csv += song.ArtistId.ToString().Replace(",", ";") + ',';
-                csv += song.ArtistName?.Replace(",", ";") + ',';
-                csv += song.CategoryId.ToString().Replace(",", ";") + ',';
-                csv += song.CategoryTitle?.Replace(",", ";") + ',';
-                csv += song.CreatedDate?.ToString().Replace(",", ";") + ',';
-                csv += song.CreatedBy?.Replace(",", ";") + ',';
-                csv += song.ModifiedDate?.ToString().Replace(",", ";") + ',';
-                csv += song.ModifiledBy?.Replace(",", ";") + ',';
+                csv += song.SongId + ",";
+                csv += song.SongTitle + ",";
+                csv += song.Image + ",";
+                csv += song.ArtistId + ",";
+                csv += song.ArtistName + ",";
+                csv += song.CategoryId + ",";
+                csv += song.CategoryTitle + ",";
+                csv += song.SongUrl+",";
+                csv += song.CreatedDate + ",";
+                csv += song.CreatedBy + ",";
+                csv += song.ModifiedDate + ",";
+                csv += song.ModifiledBy ;
                 csv += "\r\n";
             }
             byte[] bytes = Encoding.UTF8.GetBytes(csv);

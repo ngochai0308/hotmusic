@@ -41,9 +41,12 @@
                 <span asp-validation-for="SongUrl" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FileUpload"></label>
-                <input asp-for="FileUpload" />
-                <span asp-validation-for="FileUpload"></span>
+                <label asp-for="FileUpload" class="control-label"></label>
+                <input id="imageInput" asp-for="FileUpload" class="form-control" />
+                <span asp-validation-for="FileUpload" class="text-danger"></span>
+            </div>
+            <div class="image-fileupload">
+                <img id="previewImage" alt="Preview Image" style="display:none" />
             </div>
 
             <div class="form-group">
@@ -62,3 +65,20 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+<script>
+    var imageInput = document.getElementById('imageInput');
+    var previewImage = document.getElementById('previewImage');
+
+    imageInput.addEventListener('change',function(){
+        var file = imageInput.files[0];
+        if(file){
+            previewImage.src= URL.createObjectURL(file);
+            previewImage.style.display='block';
+        }
+        else{
+            previewImage.src='';
+            previewImage.style.display = 'none';
+
+        }
+    });
+</script>

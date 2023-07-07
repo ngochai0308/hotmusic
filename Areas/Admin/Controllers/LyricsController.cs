@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using HotMusic.DataModel;
 using HotMusic.Models;
 using AutoMapper;
+using HotMusic.Common;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -22,9 +23,11 @@ namespace HotMusic.Areas.Admin.Controllers
         }
 
         // GET: Admin/Lyrics
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? PageNumber,string? keyword)
         {
-            var listLyric = from l in _context.Lyric
+            keyword ??= string.Empty;
+            ViewData["currentFilter"] = keyword;
+            var listLyric = (from l in _context.Lyric
                             join s in _context.Songs on l.SongId equals s.SongId
                             select new LyricDisplayViewModel()
                             {
@@ -32,9 +35,9 @@ namespace HotMusic.Areas.Admin.Controllers
                                 lyricc = l.lyricc,
                                 SongId = l.SongId,
                                 SongTitle = s.SongTitle
-                            };
+                            }).Where(l=>l.SongTitle.Contains(keyword)|| l.lyricc.Contains(keyword));
               return _context.Lyric != null ? 
-                          View(await listLyric.ToListAsync()) :
+                          View(await PaginatedList<LyricDisplayViewModel>.CreateAsync(listLyric,PageNumber??1,5)) :
                           Problem("Entity set 'MusicDbContext.Lyric'  is null.");
         }
 

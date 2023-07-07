@@ -36,8 +36,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="FileUpload"></label>
-                    <input asp-for="FileUpload" />
+                    <input asp-for="FileUpload" id="inputImage" />
                     <span asp-validation-for="FileUpload"></span>
+                </div>
+                <div class="image-fileupload">
+                    <img id="previewImage" alt="Ảnh xem trước" src="~/img/Song/@Model.Thumbnail" />
                 </div>
                  <input type="submit" value="Lưu" asp-route-id="@Model.AlbumId" class="btn btn-primary" />
         </form>
@@ -51,3 +54,14 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script>
+    var imageInput = document.getElementById('imageInput');
+    var previewImage = document.getElementById('previewImage');
+
+    imageInput.addEventListener('change', function () {
+        var file = imageInput.files[0];
+        if (file) {
+            previewImage.src = URL.createObjectURL(file);
+        }
+    })
+</script>

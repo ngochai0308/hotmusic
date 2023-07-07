@@ -175,7 +175,7 @@ else
     <script>
     function loadForm(){
         $.ajax({
-             url: '/GetFormImportCSV',
+             url: '/ImportCSVForAlbum',
              type: 'GET',
              success: function(data){
                   $('#formContainer').html(data);

@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
 
-namespace HotMusic.DataModel
+namespace HotMusic.Models
 {
-    [Table("Category")]
-    public class Category
+    public class CategoryDisplayViewModel
     {
-        [Key]
         public int CategoryId { get; set; }
+        [DisplayName("Thể loại")]
         public string CategoryTitle { get; set; }
+        [DisplayName("Mã quốc gia")]
         public int CountryId { get; set; }
-        [NotMapped]
-        public string CountryTitle { get; set; }
+        [DisplayName("Tên quốc gia")]
+        public string? CountryTitle { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

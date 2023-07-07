@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<Head>
+    <link rel="stylesheet" href="~/css/HomePage.css" asp-append-version="true" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HotMusic</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</Head>
+
+<body>
+    <div class="tab-left">
+        <ul>
+            <li>
+                <a asp-action="HomePage1" asp-controller="Home">
+                    <img src="~/img/Home.svg" alt="" class="gray-filtered">
+                    <span class="text-tab-left">Home</span>
+                </a>
+            </li>
+            <li>
+                <a asp-action="Search" asp-controller="Home">
+                    <img src="~/img/Search.svg" alt="" class="gray-filtered">
+                    <span class="text-tab-left">Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="~/img/YourLibrary.svg" alt="" class="gray-filtered">
+                    <span class="text-tab-left">Your Library</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-right">
+        @RenderBody()
+    </div>
+    
+</body>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</html>

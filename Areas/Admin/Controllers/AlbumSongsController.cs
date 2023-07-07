@@ -9,6 +9,7 @@ using HotMusic.DataModel;
 using System.Data.Entity;
 using AutoMapper;
 using HotMusic.Models;
+using HotMusic.Common;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -23,9 +24,11 @@ namespace HotMusic.Areas.Admin.Controllers
         }
 
         // GET: Admin/AlbumSongs
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? PageNumber,string? keyword)
         {
-            var listAlbumSong = from als in _context.AlbumSongs
+            keyword ??= string.Empty;
+            ViewData["currentFilter"] = keyword;
+            var listAlbumSong = (from als in _context.AlbumSongs
                                 join al in _context.Albums on als.AlbumId equals al.AlbumId
                                 join s in _context.Songs on als.SongId equals s.SongId
                                 select new AlbumSongs()
@@ -39,7 +42,7 @@ namespace HotMusic.Areas.Admin.Controllers
                                     ModifiedDate = als.ModifiedDate,
                                     ModifiledBy = als.ModifiledBy,
                                     IsDeleted = als.IsDeleted
-                                };
+                                }).Where(als=>als.AlbumTitle.Contains(keyword)||als.SongTitle.Contains(keyword));
 
             var mapper = new MapperConfiguration(config =>
             {
@@ -48,7 +51,7 @@ namespace HotMusic.Areas.Admin.Controllers
             var displayAlbumSong = mapper.Map<IEnumerable<AlbumSongDisplayViewModel>>(listAlbumSong);
 
             return _context.AlbumSongs != null ?
-                        View(displayAlbumSong.ToList()) :
+                        View(await PaginatedList<AlbumSongDisplayViewModel>.CreateAsync(displayAlbumSong,PageNumber??1,5)) :
                         Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
         }
 
@@ -216,9 +219,9 @@ namespace HotMusic.Areas.Admin.Controllers
         }
 
         // GET: Admin/AlbumSongs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int idSong,int idAlbum)
         {
-            if (id == null || _context.AlbumSongs == null)
+            if (idSong == null || idAlbum==null)
             {
                 return NotFound();
             }
@@ -237,7 +240,7 @@ namespace HotMusic.Areas.Admin.Controllers
                                  ModifiedDate = als.ModifiedDate,
                                  ModifiledBy = als.ModifiledBy,
                                  IsDeleted = als.IsDeleted
-                             }).First();
+                             }).First(als=>als.SongId == idSong || als.AlbumId == idAlbum);
             if (albumSongs == null)
             {
                 return NotFound();
@@ -253,13 +256,13 @@ namespace HotMusic.Areas.Admin.Controllers
         // POST: Admin/AlbumSongs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int idSong, int idAlbum)
         {
             if (_context.AlbumSongs == null)
             {
                 return Problem("Entity set 'MusicDbContext.AlbumSongs'  is null.");
             }
-            var albumSongs = _context.AlbumSongs.First();
+            var albumSongs = _context.AlbumSongs.First(als=>als.SongId == idSong || als.AlbumId == idAlbum);
             if (albumSongs != null)
             {
                 _context.AlbumSongs.Remove(albumSongs);

@@ -5,8 +5,13 @@
 }
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Thêm mới</a>
 </p>
+<form method="get" asp-action="index">
+    Nhập từ khóa
+    <input type="text" name="keyword" value="@ViewData["currentFilter"]" />
+    <input type="submit" value="Tìm kiếm" id="btnSearch" class="btn btn-primary" />
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -63,3 +68,4 @@
 }
     </tbody>
 </table>
+<partial name="_PagintedPartial" model="@Model"></partial>

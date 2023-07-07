@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using HotMusic.Models;
 using System.Diagnostics;
+using HotMusic.Contract;
+using HotMusic.DataModel;
 
 namespace HotMusic.Controllers
 {
@@ -10,14 +12,45 @@ namespace HotMusic.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMusicService _musicService;
+        private readonly IAlbumRepository _albumRepository;
+        private readonly ISongRepository _songRepository;
+        private readonly MusicDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, IMusicService musicService)
+        public HomeController(ILogger<HomeController> logger, IMusicService musicService,IAlbumRepository albumRepository,ISongRepository songRepository,MusicDbContext context)
         {
             _logger = logger;
+            _songRepository = songRepository;
             _musicService = musicService;
+            _albumRepository = albumRepository;
+            _context= context;
         }
-        [Route("/HomePage")]
+        
         public IActionResult HomePage()
+        {
+            return View();
+        }
+        public IActionResult HomePage1()
+        {
+            ViewData["listAlbum"] = _albumRepository.GetAll();
+            return View();
+        }
+        public IActionResult PageListSong(int albumId)
+        {
+            if (albumId == null || _albumRepository.GetById(albumId) == null)
+            {
+                return NotFound();
+            }
+            var ListIdSong = _context.AlbumSongs.Where(als => als.AlbumId == albumId)
+                .Select(als => als.SongId);
+            var listSong = _songRepository.GetAll().Where(s=> ListIdSong.Contains(s.SongId));
+            var Album = _albumRepository.GetAll().Where(a => a.AlbumId == albumId).First();
+
+
+            ViewData["listSongg"] = listSong;
+            ViewData["Album"] = Album;
+            return View();
+        }
+        public IActionResult Search()
         {
             return View();
         }

@@ -80,6 +80,6 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=index}/{id?}");
+    pattern: "{controller=Home}/{action=HomePage1}/{id?}");
 
 app.Run();

@@ -1,0 +1,49 @@
+﻿@{
+    int fromRecord = (Model.PageIndex - 1) * Model.PageSize + 1;
+    int toRecord = Model.PageIndex * Model.PageSize;
+    if (toRecord > Model.TotalRecords)
+    {
+        toRecord = Model.TotalRecords;
+    }
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+
+    <h6>
+        Tổng số bản ghi: @Model.Count, Hiển thị từ: @fromRecord đến @toRecord
+    </h6>
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex-1)"
+       asp-route-filter="@ViewData["filter"]"
+       class="btn btn-default @prevDisabled">&lt;&lt;</a>
+
+    <!-- Display page number-->
+    for (int pageIndex = 1; pageIndex <= Model.TotalPages; pageIndex++)
+    {
+        if (pageIndex == Model.PageIndex)
+        {
+            <a class="btn btn-default">
+                <span style="color:red; font-size:18px;"><b>@pageIndex</b></span>
+            </a>
+        }
+        else
+        {
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["currentSort"]"
+               asp-route-pageNumber="@pageIndex"
+               asp-route-filter="@ViewData["filter"]"
+               class="btn btn-default">
+                <span>@pageIndex</span>
+            </a>
+        }
+    }
+
+    <a asp-action="Index"
+       asp-route-sortOrder="@ViewData["currentSort"]"
+       asp-route-pageNumber="@(Model.PageIndex+1)"
+       asp-route-filter="@ViewData["filter"]"
+       class="btn btn-default @nextDisabled">
+        &gt;&gt;
+    </a>
+}
