@@ -36,7 +36,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="FileUpload"></label>
-                    <input asp-for="FileUpload" id="inputImage" />
+                    <input asp-for="FileUpload" id="inputImage" style="display:none" />
                     <span asp-validation-for="FileUpload"></span>
                 </div>
                 <div class="image-fileupload">
@@ -62,6 +62,11 @@
         var file = imageInput.files[0];
         if (file) {
             previewImage.src = URL.createObjectURL(file);
+            previewIimage.style.display='block';
+        }
+        else{
+            previewImage.src='';
+            previewImage.style.display='none';
         }
     })
 </script>

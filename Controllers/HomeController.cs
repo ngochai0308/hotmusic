@@ -52,10 +52,17 @@ namespace HotMusic.Controllers
         }
         public IActionResult Search()
         {
+            var listAlbum = _albumRepository.GetAll();
+            ViewData["listAlbum"] = listAlbum.ToList();
             return View();
         }
-        public IActionResult Index()
+        public IActionResult SearchResult(string keyword)
         {
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return RedirectToAction("Search");
+            }
+            ViewData["keyword"] = keyword;
             return View();
         }
 

@@ -70,6 +70,11 @@
         var file = imageInput.files[0];
         if (file) {
             previewImage.src = URL.createObjectURL(file);
+            previewIimage.style.display = 'block';
+        }
+        else {
+            previewImage.src = '';
+            previewImage.style.display = 'none';
         }
     })
 </script>

@@ -1,0 +1,95 @@
+﻿
+@font-face {
+    font-family: 'Regular-Bold';
+    src: url('../webfonts/AvenirLTStd-Black.otf') format('truetype');
+}
+.container{
+    color: white;
+    font-family: Regular;
+    background-color: #325C8E;
+}
+.top-div{
+    background-color: rgba(red, green, blue, 0);
+    height: 200px;
+    width: 100%;
+}
+.left-top{
+    height: 100%;
+    width: 200px;
+    float: left;
+}
+.left-top img{
+    margin-top:10px;
+    border-radius:15px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+.right-top{
+    margin-left: 15px;
+    height: 100%;
+    width: 70%;
+    float: left;
+}
+.title-righttop-small{
+    height: 20px;
+    margin-top: 40px;
+}
+.title-righttop-large{
+    height: 150px;
+    font-size: 70px;
+    white-space: nowrap;
+}
+.bottom-div{
+    margin-top: 20px;
+    background-color: black;
+    height: 60%;
+    width: 100%;
+}
+.element-bottom{
+    width: 100%;
+    color: #B3B3B3;
+    padding: 5px;
+    height: 60px;
+    display: flex;
+}
+.element-bottom:hover{
+    background-color: #25282b;
+}
+.stt {
+    margin-left: 15px;
+    margin-right: 10px;
+    align-self: flex-end;
+  }
+  
+  .title {
+    margin-left: 20px;
+    width: 45%;
+    align-self: flex-end;
+  }
+    .img-song{
+        float: left;
+        margin-right: 10px;
+        height: 50px;
+        width: 50px;
+    }
+    .img-song img{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
+    .title-song{
+        color: white;
+        font-family:Regular-Bold;
+        margin-bottom: 7px;
+    }
+  
+  .plays {
+    width: 20%;
+    align-self: flex-end;
+  }
+  
+  .album {
+    flex-grow: 1;
+    align-self: flex-end;
+  }

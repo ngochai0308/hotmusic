@@ -1,0 +1,40 @@
+﻿@font-face {
+    font-family: 'Regular-Bold';
+    src: url('../webfonts/AvenirLTStd-Black.otf') format('truetype');
+}
+.container {
+    color: white;
+    font-family: Regular-Bold;
+    background-color: #325C8E;
+}
+
+.element {
+    border-radius:15px;
+    position: relative;
+    overflow: hidden;
+    background-color: blueviolet;
+    float: left;
+    height: 200px;
+    width: 200px;
+    margin: 10px;
+}
+
+.text-element {
+    height: 60px;
+    font-size: 20px;
+    padding: 20px 0 0 20px;
+}
+
+.img-element {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 110px;
+    width: 110px;
+}
+
+    .img-element img {
+        height: 100%;
+        width: 100%;
+        transform: translate(10%, 10%) rotate(20deg);
+    }

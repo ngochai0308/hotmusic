@@ -2,9 +2,58 @@
 @{
     var Album = ViewData["Album"] as Albums;
     var listSong = ViewData["listSongg"] as IEnumerable<Songs>;
+    var i = 1;
 }
-<h3>Các bài hát trong Album: @Album.AlbumTitle</h3>
-@foreach(var Song in listSong)
-{
-    <span>@Song.SongTitle</span><br />
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <link href="~/css/PageListSong.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <div class="top-div">
+            <div class="left-top">
+                <img src="~/img/Album/@Album.Thumbnail">
+            </div>
+            <div class="right-top">
+                <div class="title-righttop-small">
+                    <span>Album</span>
+                </div>
+                <div class="title-righttop-large">
+                    @Album.AlbumTitle
+                </div>
+            </div>
+        </div>
+        <div class="bottom-div">
+            <div class="element-bottom">
+                <div class="stt"> #</div>
+                <div class="title">Title</div>
+                <div class="plays">Plays</div>
+                <div class="album">Album</div>
+            </div>
+            <hr>
+            @foreach(var song in listSong)
+            {
+                <div class="element-bottom">
+                <div class="stt"> @(i++)</div>
+                <div class="title">
+                    <div class="img-song">
+                        <img src="~/img/Song/@song.Image" alt="">
+                    </div>
+                    <div class="title-song">@song.SongTitle</div>
+                    <div class="title-artist">@song.ArtistName</div>
+                </div>
+                <div class="plays">@song.ViewCount</div>
+                <div class="album">Album</div>
+            </div>
+            }
+            
+        </div>
+    </div>
+    
+</body>
+</html>

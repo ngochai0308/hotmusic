@@ -6,55 +6,24 @@
 }
 <html>
     <body>
-        <div class="top-tab-right">
-            <button class="btn-previous">
-                <svg role="img" height="16" width="16" aria-hidden="true"
-                     class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16" data-encore-id="icon">
-                    <path d="M11.03.47a.75.75 0 0 1 0 1.06L4.56 8l6.47 6.47a.75.75 0 1 1-1.06 1.06L2.44 8 9.97.47a.75.75 0 0 1 1.06 0z"></path>
-                </svg>
-            </button>
-            <button>
-                <svg role="img" height="16" width="16" aria-hidden="true" class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16"
-                     data-encore-id="icon">
-                    <path d="M4.97.47a.75.75 0 0 0 0 1.06L11.44 8l-6.47 6.47a.75.75 0 1 0 1.06 1.06L13.56 8 6.03.47a.75.75 0 0 0-1.06 0z"></path>
-                </svg>
-            </button>
-            
-            @if (string.IsNullOrEmpty(UserName))
+        <div class="content-tab-right">
+            <div class="title-content">Nhạc Trẻ</div>
+
+            <div class="title-content-right">Show all</div>
+                
+            @foreach (var album in listAlbum.Take(5))
             {
-                <div class="login-top-tab">
-                    <a class="btn-singup" asp-action="Register" asp-controller="Users">Sign up</a>
-                    <a class="btn-login" asp-action="Login" asp-controller="Users">Log in</a>
+                <div class="item-content-tab-right" onclick="PageListSong('@album.AlbumId')">
+                    <div class="img-item">
+                        <img src="~/img/Album/@album.Thumbnail">
+                    </div>
+                    <div class="text-item">
+                        <p><b>@album.AlbumTitle</b></p>
+                        <p class="text-content"></p>
+                    </div>
                 </div>
             }
-            else
-            {
-                <div style="float:right;height:20px">
-                    <partial name="_MenuPartial" model="@UserName"></partial>
-                </div>
-                
-            } 
-            
         </div>
-
-            <div class="content-tab-right">
-                <div class="title-content">Nhạc Trẻ</div>
-
-                <div class="title-content-right">Show all</div>
-                
-                @foreach (var album in listAlbum.Take(5))
-                {
-                    <div class="item-content-tab-right" onclick="PageListSong('@album.AlbumId')">
-                        <div class="img-item">
-                            <img src="~/img/Album/@album.Thumbnail">
-                        </div>
-                        <div class="text-item">
-                            <p><b>@album.AlbumTitle</b></p>
-                            <p class="text-content"></p>
-                        </div>
-                    </div>
-                }
-            </div>
        
         
         <div class="content-tab-right">

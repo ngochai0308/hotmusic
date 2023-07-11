@@ -16,7 +16,8 @@ html {
 body {
     margin-bottom: 60px;
     background-image: url('../img/Colorful_music_background_dn.jpg');
-    background-size:cover;
+    background-size: cover;
+    background-position: center;
 }
 
 .col-action {

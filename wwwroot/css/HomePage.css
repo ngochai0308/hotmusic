@@ -11,6 +11,13 @@ html {
     font-family: Regular;
     background-color: black;
 }
+.container {
+    width:100px;
+    padding:0px !important;
+}
+a{
+    text-decoration:none !important;
+}
 .tab-left {
     position: sticky;
     top: 0;
@@ -28,12 +35,13 @@ html {
     float: left;
 }
 .top-tab-right {
+    z-index:2;
     top: 0;
     left: 0;
     right: 0;
     position: sticky;
     height: 4em;
-    margin: 0.5em;
+    padding: 0.5em;
     padding-top: 0.6em;
     margin-bottom: 1em;
     background-color:black;
@@ -56,27 +64,30 @@ html {
     width: 9%;
     font-weight: bold;
 }
-.item-content-tab-right{
+.item-content-tab-right {
+    border-radius: 10px;
     background-color: #1D1D1D;
-    height: 18em;
+    height: 16em;
     width: 18%;
     margin: 0.5em;
 }
     .item-content-tab-right:hover {
         background-color: #918c8c;
     }
-.img-item{
-    height: 50%;
+.img-item {
+
+    height: 70%;
     width: 90%;
     margin: 0.5em;
 }
-.img-item img{
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-}
+    .img-item img {
+        border-radius: 20px;
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+    }
 .text-item{
-    height: 30%;
+    height: 20%;
     margin: 0.5em;
     width: 90%;
     overflow: hidden;
@@ -89,7 +100,7 @@ html {
     font-size: 14px;
 }
 .btn-previous{
-   margin: 10px;
+   margin: 15px;
 }
 .login-top-tab{
     float: right;
@@ -179,4 +190,35 @@ a {
     width: max-content;
     text-decoration: none;
     color: inherit;
+}
+.button-top{
+    float:left;
+    width:100px;
+}
+.search-input {
+    margin-top:5px;
+    float: left;
+    width: 300px;
+}
+    .search-input input {
+        font-size: 14px;
+        color: #968256;
+        border: none;
+        height: 40px;
+        width: 100%;
+        border-radius: 20px;
+        background-color: #242424;
+    }
+
+.search-input input[type="text"] {
+    padding-left: 40px; 
+    background-image: none;
+}
+
+.search-input #basic-addon1 {
+position: absolute;
+top: 50%;
+left: 120px;
+transform: translateY(-50%);
+pointer-events: none; /* Đảm bảo sự kiện không tác động vào biểu tượng */
 }
