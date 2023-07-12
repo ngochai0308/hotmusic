@@ -1,0 +1,27 @@
+﻿@using HotMusic.DataModel;
+@{
+    Layout = "/Views/Shared/_LayoutSearchResult.cshtml";
+    var listAlbum = ViewData["listAlbum"] as List<Albums>;
+}
+@if(listAlbum.Count == 0){
+    <div class="title-not">
+        <h2>Không có album nào được tìm thấy!</h2><br>
+        <h3>Vui lòng kiểm tra lại từ khóa.</h3>
+    </div>
+}
+else{
+    <div class="content-tab-right">
+    @foreach(var album in listAlbum)
+    {
+        <div class="item-content-tab-right" onclick="PageListSong('@album.AlbumId')">
+            <div class="img-item">
+                <img src="~/img/Album/@album.Thumbnail">
+            </div>
+            <div class="text-item">
+                <p><b>@album.AlbumTitle</b></p>
+                <p class="text-content"></p>
+            </div>
+        </div>
+    }
+    </div>
+}

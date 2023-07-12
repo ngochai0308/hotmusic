@@ -1,0 +1,57 @@
+﻿@using HotMusic.DataModel;
+@{
+    var Artist = ViewData["Artist"] as Artists;
+    var listAlbum = ViewData["listAlbum"] as List<Albums>;
+}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <link href="~/css/PageListSong.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="top-div">
+            <div class="left-top">
+                <img src="~/img/Artist/noo.jpg">
+            </div>
+            <div class="right-top">
+                <div class="title-righttop-small">
+                    <span>Nghệ sĩ</span>
+                </div>
+                <div class="title-righttop-large">
+                    @Artist.ArtistName
+                </div>
+            </div>
+        </div>
+        <br />
+        <h3>Tiểu sử</h3>
+        <span>
+            @Artist.ArtistBio
+        </span>
+    </div>
+    <div class="content-tab-right">
+        <div class="title-content">Album của @Artist.ArtistName</div>
+
+        <div class="title-content-right">Show all</div>
+
+        @foreach (var album in listAlbum.Take(5))
+        {
+            <div class="item-content-tab-right" onclick="PageListSong('@album.AlbumId')">
+                <div class="img-item">
+                    <img src="~/img/Album/@album.Thumbnail">
+                </div>
+                <div class="text-item">
+                    <p><b>@album.AlbumTitle</b></p>
+                    <p class="text-content"></p>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+
+<script>
+    function PageListSong(albumId) {
+        window.location.href = '@Url.Action("PageListSong","Home")' + '?albumId=' + albumId
+    };
+</script>

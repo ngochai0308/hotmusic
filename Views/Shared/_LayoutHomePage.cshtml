@@ -4,10 +4,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <Head>
+    <link rel="icon" href="~/img/music.ico" type="image/x-icon" />
     <link rel="stylesheet" href="~/css/HomePage.css" asp-append-version="true" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - HotMusic</title>
+    <title>Nghe nhạc trực tuyến</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </Head>
 
@@ -15,15 +16,15 @@
     <div class="tab-left">
         <ul>
             <li>
-                <a asp-action="HomePage1" asp-controller="Home">
+                <a asp-action="HomePage" asp-controller="Home">
                     <img src="~/img/Home.svg" alt="" class="gray-filtered">
-                    <span class="text-tab-left">Home</span>
+                    <span class="text-tab-left" id="Home">Home</span>
                 </a>
             </li>
             <li>
                 <a asp-action="Search" asp-controller="Home">
                     <img src="~/img/Search.svg" alt="" class="gray-filtered">
-                    <span class="text-tab-left">Search</span>
+                    <span class="text-tab-left" id="search">Search</span>
                 </a>
             </li>
             <li>
@@ -37,10 +38,10 @@
     <div class="tab-right">
          <div class="top-tab-right">
             <div class="button-top">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-left btn-previous" viewBox="0 0 16 16">
+                <svg onclick="goBack()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-left btn-previous" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" />
                 </svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" sheight="20" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                <svg onclick="goForward()" xmlns="http://www.w3.org/2000/svg" width="20" sheight="20" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
                 </svg>
             </div>
@@ -69,3 +70,14 @@
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </html>
+<script>
+     var myA = document.getElementById('@ViewData["Name"]');
+     myA.style.color = 'white';
+
+    function goBack() {
+        window.history.back();
+     }
+     function goForward(){
+         window.history.forward();
+     }
+</script>

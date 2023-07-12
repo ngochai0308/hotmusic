@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>music.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,10 @@
     <None Remove=".gitignore" />
     <None Remove="README.md" />
     <None Remove="ScaffoldingReadMe.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="music.ico" />
   </ItemGroup>
 
   <ItemGroup>

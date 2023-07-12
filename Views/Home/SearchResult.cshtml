@@ -1,7 +1,50 @@
 ﻿@using HotMusic.DataModel;
 @{
-    Layout = "_LayoutSearch";
+    Layout = "/Views/Shared/_LayoutSearchResult.cshtml";
     var keyword = ViewData["keyword"] as string;
+    var listSong = ViewData["listSong"] as List<Songs>;
+    int i = 1;
 }
-<h1>Đây là trang search result</h1>
-<h3>Nội dung vừa nhập: @keyword </h3>
+<html>
+    <head>
+    <link href="~/css/PageListSong.css" rel="stylesheet">
+    </head>
+    <body>
+    @if (listSong.Count == 0)
+    {
+        <div class="title-not">
+            <h2>Không có bài hát nào được tìm thấy!</h2><br>
+            <h3>Vui lòng kiểm tra lại từ khóa.</h3>
+        </div>
+    }
+    else
+    {
+        <div class="bottom-div">
+            <div class="element-bottom">
+                <div class="stt"> #</div>
+                <div class="title">Title</div>
+                <div class="plays">Plays</div>
+                <div class="album">Album</div>
+            </div>
+            <hr>
+            @foreach (var song in listSong)
+            {
+                <div class="element-bottom">
+                    <div class="stt"> @(i++)</div>
+                    <div class="title">
+                        <div class="img-song">
+                            <img src="~/img/Song/@song.Image" alt="">
+                        </div>
+                        <div class="title-song">@song.SongTitle</div>
+                        <div class="title-artist">@song.ArtistName</div>
+                    </div>
+                    <div class="plays">@song.ViewCount</div>
+                    <div class="album">Album</div>
+                </div>
+            }
+        </div>
+    }
+    
+    </body>
+</html>
+

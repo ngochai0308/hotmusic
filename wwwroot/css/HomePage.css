@@ -1,4 +1,4 @@
-@font-face {
+t@font-face {
     font-family: 'Regular';
     src: url('../webfonts/Gilroy-Regular.ttf') format('truetype');
   }
@@ -74,8 +74,7 @@ a{
     .item-content-tab-right:hover {
         background-color: #918c8c;
     }
-.img-item {
-
+.img-item, .img-item-artist {
     height: 70%;
     width: 90%;
     margin: 0.5em;
@@ -86,7 +85,13 @@ a{
         width: 100%;
         object-fit: contain;
     }
-.text-item{
+.img-item-artist img {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+.text-item {
     height: 20%;
     margin: 0.5em;
     width: 90%;
@@ -220,5 +225,35 @@ position: absolute;
 top: 50%;
 left: 120px;
 transform: translateY(-50%);
-pointer-events: none; /* Đảm bảo sự kiện không tác động vào biểu tượng */
+pointer-events: none; 
+}
+
+.menu {
+    height: 50px;
+}
+
+    .menu a {
+        display: inline-block;
+        margin: 5px 5px;
+        height: 35px;
+        width: 70px;
+        line-height: 35px;
+        text-align: center;
+        font-size: 14px;
+        font-family: 'Circular', sans-serif !important;
+        border: none;
+        border-radius: 40px;
+        text-decoration: none;
+        color: white;
+        background-color: #232323;
+    }
+    .menu a:hover{
+        color:aquamarine;
+    }
+
+.title-not {
+    text-align: center;
+    margin: 11% 0px;
+    height: 100%;
+    width: 100%;
 }

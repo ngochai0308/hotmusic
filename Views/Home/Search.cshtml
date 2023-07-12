@@ -16,7 +16,7 @@
     <div class="container">
         @foreach(var Album in listAlbum)
         {
-            <div class="element">
+            <div class="element" onclick="PageListSong('@Album.AlbumId')">
                 <div class="text-element">@Album.AlbumTitle</div>
                 <div class="img-element">
                     <img src="~/img/Album/@Album.Thumbnail">
@@ -35,6 +35,9 @@
         const color = colors[indexColor];
         element.style.backgroundColor = color;
     });
+    function PageListSong(albumId) {
+        window.location.href = '@Url.Action("PageListSong","Home")' + '?albumId=' + albumId
+    }
 </script>
 
 

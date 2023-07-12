@@ -3,6 +3,7 @@
     font-family: 'Regular-Bold';
     src: url('../webfonts/AvenirLTStd-Black.otf') format('truetype');
 }
+
 .container{
     color: white;
     font-family: Regular;
@@ -13,6 +14,7 @@
     height: 200px;
     width: 100%;
 }
+
 .left-top{
     height: 100%;
     width: 200px;

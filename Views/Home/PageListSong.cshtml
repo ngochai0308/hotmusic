@@ -33,7 +33,7 @@
                 <div class="stt"> #</div>
                 <div class="title">Title</div>
                 <div class="plays">Plays</div>
-                <div class="album">Album</div>
+                <div class="album">Category</div>
             </div>
             <hr>
             @foreach(var song in listSong)
@@ -48,7 +48,7 @@
                     <div class="title-artist">@song.ArtistName</div>
                 </div>
                 <div class="plays">@song.ViewCount</div>
-                <div class="album">Album</div>
+                <div class="album">@song.CategoryTitle</div>
             </div>
             }
             

@@ -1,0 +1,35 @@
+﻿@using HotMusic.DataModel;
+@{
+    Layout = "/Views/Shared/_LayoutSearchResult.cshtml";
+    var listArtist = ViewData["listArtist"] as List<Artists>;
+}
+
+@if (listArtist.Count == 0)
+{
+    <div class="title-not">
+        <h2>Không có nghệ sĩ nào được tìm thấy!</h2><br>
+        <h3>Vui lòng kiểm tra lại từ khóa.</h3>
+    </div>
+}
+else
+{
+    <div class="content-tab-right">
+        @foreach (var artist in listArtist)
+        {
+            <div class="item-content-tab-right" onclick="PageDetailsArtist('@artist.ArtistId')">
+                <div class="img-item-artist">
+                    <img src="~/img/Artist/noo.jpg">
+                </div>
+                <div class="text-item">
+                    <p><b>@artist.ArtistName</b></p>
+                    <p class="text-content"></p>
+                </div>
+            </div>
+        }
+    </div>
+}
+<script>
+    function PageDetailsArtist(ArtistId){
+        window.location.href='@Url.Action("DetailsArtist","Home")'+'?ArtistId='+ArtistId;
+    }
+</script>

@@ -1,101 +1,31 @@
-﻿
+﻿@using HotMusic.DataModel;
 @{
-    Layout = null;
+    Layout = "_LayoutHomePage";
+    var listAlbum = ViewData["listAlbum"] as List<Albums>;
+    var UserName = Context.Session.GetString("UserName") as string;
 }
-<Head>
-    <link rel="stylesheet" href="~/css/HomePage.css" asp-append-version="true" />
-</Head>
-<body>
-    <div class="tab-left">
-        <ul>
-            <li>
-                <a href="#">
-                    <img src="~/img/Home.svg" alt="" class="gray-filtered">
-                    <span class="text-tab-left">Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="~/img/Search.svg" alt="" class="gray-filtered">
-                    <span class="text-tab-left">Search</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="~/img/YourLibrary.svg" alt="" class="gray-filtered">
-                    <span class="text-tab-left">Your Library</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="tab-right">
-        <div class="top-tab-right">
-            <button class="btn-previous">
-                <svg role="img" height="16" width="16" aria-hidden="true"
-                     class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16" data-encore-id="icon">
-                    <path d="M11.03.47a.75.75 0 0 1 0 1.06L4.56 8l6.47 6.47a.75.75 0 1 1-1.06 1.06L2.44 8 9.97.47a.75.75 0 0 1 1.06 0z"></path>
-                </svg>
-            </button>
-            <button>
-                <svg role="img" height="16" width="16" aria-hidden="true" class="Svg-sc-ytk21e-0 leya-dW IYDlXmBmmUKHveMzIPCF" viewBox="0 0 16 16"
-                     data-encore-id="icon">
-                    <path d="M4.97.47a.75.75 0 0 0 0 1.06L11.44 8l-6.47 6.47a.75.75 0 1 0 1.06 1.06L13.56 8 6.03.47a.75.75 0 0 0-1.06 0z"></path>
-                </svg>
-            </button>
-            <div class="login-top-tab">
-                <button class="btn-singup">Sign up</button>
-                <button>Log in</button>
-            </div>
-        </div>
+<html>
+    <body>
         <div class="content-tab-right">
-            <div class="title-content">Focus</div>
+            <div class="title-content">Nhạc Trẻ</div>
+
             <div class="title-content-right">Show all</div>
-            <div class="item-content-tab-right">
-                <div class="img-item">
-                    <img src="https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6">
+                
+            @foreach (var album in listAlbum.Take(5))
+            {
+                <div class="item-content-tab-right" onclick="PageListSong('@album.AlbumId')">
+                    <div class="img-item">
+                        <img src="~/img/Album/@album.Thumbnail">
+                    </div>
+                    <div class="text-item">
+                        <p><b>@album.AlbumTitle</b></p>
+                        <p class="text-content"></p>
+                    </div>
                 </div>
-                <div class="text-item">
-                    <p><b>Peaceful Piano</b></p>
-                    <p class="text-content">Peaceful piano to help you slow down, breathe, and relax.</p>
-                </div>
-            </div>
-            <div class="item-content-tab-right">
-                <div class="img-item">
-                    <img src="https://i.scdn.co/image/ab67706f000000025551996f500ba876bda73fa5">
-                </div>
-                <div class="text-item">
-                    <p><b>Deep Focus</b></p>
-                    <p class="text-content">Keep calm and focus with ambient and post-rock music.</p>
-                </div>
-            </div>
-            <div class="item-content-tab-right">
-                <div class="img-item">
-                    <img src="https://i.scdn.co/image/ab67706f00000002fe24d7084be472288cd6ee6c">
-                </div>
-                <div class="text-item">
-                    <p><b>Instrumental Study</b></p>
-                    <p class="text-content">Focus with soft study music in the background.</p>
-                </div>
-            </div>
-            <div class="item-content-tab-right">
-                <div class="img-item">
-                    <img src="https://i.scdn.co/image/ab67706f00000002724554ed6bed6f051d9b0bfc">
-                </div>
-                <div class="text-item">
-                    <p><b>Focus Flow</b></p>
-                    <p class="text-content">Uptempo instrumental hip hop beats.</p>
-                </div>
-            </div>
-            <div class="item-content-tab-right">
-                <div class="img-item">
-                    <img src="https://i.scdn.co/image/ab67706f0000000296e08a91ef3c7a6e7bfaa9a6">
-                </div>
-                <div class="text-item">
-                    <p><b>Beats to think to</b></p>
-                    <p class="text-content">Focus with deep techno and tech house.</p>
-                </div>
-            </div>
+            }
         </div>
+       
+        
         <div class="content-tab-right">
             <div class="title-content">Spotify Playlists</div>
             <div class="title-content-right">Show all</div>
@@ -145,5 +75,10 @@
                 </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
+</html>
+<script>
+    function PageListSong(albumId){
+        window.location.href='@Url.Action("PageListSong","Home")'+'?albumId='+albumId
+    }
+</script>

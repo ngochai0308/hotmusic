@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "_LayoutSearch.cshtml";
+}
+<div class="menu">
+    <a id="Songs" asp-action="SearchResult" asp-route-keyword="@ViewData["keyword"]">Songs</a>
+    <a id="Artists" asp-action="ArtistResult" asp-route-keyword="@ViewData["keyword"]">Artists</a>
+    <a id="Playlists" asp-action="PlaylistResult" asp-route-keyword="@ViewData["keyword"]">Playlists</a>
+    <a id="Albums" asp-action="AlbumResult" asp-route-keyword="@ViewData["keyword"]">Albums</a>
+</div>
+@RenderBody()
+<script>
+    var myButton = document.getElementById('@ViewData["NameId"]')
+    if (@ViewData["NameId"]!=null) {
+        myButton.style.backgroundColor='white';
+        myButton.style.color='black';
+    }
+</script>

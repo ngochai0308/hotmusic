@@ -1,4 +1,8 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿window.onload = function () {
+    var inputElement = document.getElementById('myInput');
+    var textLength = inputElement.value.length;
+    inputElement.setSelectionRange(textLength, textLength);
+};
+function submitForm() {
+    document.getElementById('myForm').submit();
+};

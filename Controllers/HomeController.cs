@@ -14,24 +14,23 @@ namespace HotMusic.Controllers
         private readonly IMusicService _musicService;
         private readonly IAlbumRepository _albumRepository;
         private readonly ISongRepository _songRepository;
+        private readonly IArtistRepository _artistRepository;
         private readonly MusicDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, IMusicService musicService,IAlbumRepository albumRepository,ISongRepository songRepository,MusicDbContext context)
+        public HomeController(ILogger<HomeController> logger, IMusicService musicService,IAlbumRepository albumRepository,ISongRepository songRepository,MusicDbContext context,IArtistRepository artistRepository)
         {
             _logger = logger;
             _songRepository = songRepository;
             _musicService = musicService;
             _albumRepository = albumRepository;
             _context= context;
+            _artistRepository = artistRepository;
         }
         
         public IActionResult HomePage()
         {
-            return View();
-        }
-        public IActionResult HomePage1()
-        {
             ViewData["listAlbum"] = _albumRepository.GetAll();
+            ViewData["Name"] = "Home";
             return View();
         }
         public IActionResult PageListSong(int albumId)
@@ -53,16 +52,62 @@ namespace HotMusic.Controllers
         public IActionResult Search()
         {
             var listAlbum = _albumRepository.GetAll();
+            
             ViewData["listAlbum"] = listAlbum.ToList();
+            ViewData["Name"] = "Search";
             return View();
         }
+        [Route("/search")]
         public IActionResult SearchResult(string keyword)
         {
             if (string.IsNullOrEmpty(keyword))
             {
                 return RedirectToAction("Search");
             }
+            var listSong = _songRepository.GetAll(keyword);
+            ViewData["listSong"] = listSong.ToList();
+
             ViewData["keyword"] = keyword;
+            ViewData["NameId"] = "Songs";
+            return View();
+        }
+        [Route("/search/{keyword?}/album")]
+        public IActionResult AlbumResult(string keyword)
+        {
+            var listAlbum = _albumRepository.GetAll(keyword);
+
+            ViewData["listAlbum"] = listAlbum.ToList();
+            ViewData["keyword"] = keyword;
+            ViewData["NameId"] = "Albums";
+            return View();
+        }
+        [Route("/search/{keyword?}/playlist")]
+        public IActionResult PlaylistResult(string keyword)
+        {
+            ViewData["keyword"] = keyword;
+            ViewData["NameId"] = "Playlists";
+            return View();
+        }
+        [Route("/search/{keyword?}/artist")]
+        public IActionResult ArtistResult(string keyword)
+        {
+            var listArtist = _artistRepository.GetAll(keyword);
+            ViewData["listArtist"] = listArtist.ToList();
+
+            ViewData["keyword"] = keyword;
+            ViewData["NameId"] = "Artists";
+            return View();
+        }
+        public IActionResult DetailsArtist(int ArtistId)
+        {
+            var listAlbum = _albumRepository.GetAll().Where(al=>al.ArtistId == ArtistId);
+            var Artist = _artistRepository.GetById(ArtistId);
+            if(Artist == null)
+            {
+                NotFound();
+            }
+            ViewData["Artist"] = Artist;
+            ViewData["listAlbum"] = listAlbum.ToList();
             return View();
         }
 
