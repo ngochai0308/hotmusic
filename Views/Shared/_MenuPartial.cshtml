@@ -23,5 +23,8 @@
         <a class="dropdown-item" asp-area="Admin" asp-action="profile" asp-controller="Users" asp-route-id="@Context.Session.GetInt32("Id")">
             Hồ sơ
         </a>
+        <a class="dropdown-item" asp-action="Logout" asp-controller="Users">
+            Đăng xuất
+        </a>
     </div>
 </div>

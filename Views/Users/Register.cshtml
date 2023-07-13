@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="~/css/style.css">
-
 </head>
 <body>
     <section class="ftco-section" style="padding-top:1em !important">
@@ -21,13 +20,6 @@
             <div class="row justify-content-center">
                 <div class="col-md-12 col-lg-10">
                     <div class="wrap d-md-flex">
-                        <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last backimg">
-                            <div class="text w-100">
-                                <h2>Chào mừng đến trang đăng kí</h2>
-                                <p>Bạn đã có tài khoản?</p>
-                                <a asp-action="Login" asp-controller="Users" class="btn btn-white btn-outline-white">Đăng nhập</a>
-                            </div>
-                        </div>
                         <div class="login-wrap p-4 p-lg-5">
                             <div class="d-flex">
                                 <div class="w-100">
@@ -42,25 +34,25 @@
                             </div>
                             <form asp-action="Register" method="post" class="signin-form">
                                 <div class="form-group mb-3">
-                                    <label class="label" asp-for="UserName"></label>
+                                    <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-user"></span></div>
                                     <input type="text" class="form-control" asp-for="UserName" placeholder="Username" required>
                                     <span asp-validation-for="UserName" class="text-danger"></span>
                                 </div>
                                 <div class="form-group mb-3">
-                                    <label class="label" asp-for="Email"></label>
-                                    <input type="text" class="form-control" asp-for="Email" placeholder="Username" required>
+                                    <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-envelope"></span></div>
+                                    <input type="text" class="form-control" asp-for="Email" placeholder="Email" required>
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                                 <div style="display: flex; flex-wrap: wrap;">
                                     <div class="form-group flex-21">
-                                        <label class="label" asp-for="Password"></label>
+                                        <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
                                         <input type="password" class="form-control" asp-for="Password" placeholder="Password" required>
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
                                     <div class="form-group flex-21">
-                                        <label class="label" asp-for="ConfilmPassword">ConfilmPassword</label>
-                                        <input type="password" class="form-control" asp-for="ConfilmPassword" placeholder="Confilm Password">
-                                        <span asp-validation-for="ConfilmPassword" class="text-danger"></span>
+                                        <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
+                                        <input type="password" class="form-control" asp-for="ConfirmPassword" placeholder="Confirm Password">
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                     </div>
                                 </div>
                                 
@@ -69,6 +61,10 @@
                                 </div>
    
                             </form>
+                            <div class="w-100 text-center mt-4 text">
+                                <p class="mb-0">Bạn đã có tài khoản</p>
+                                <a asp-action="Login">Đăng nhập</a>
+                            </div>
                         </div>
                     </div>
                 </div>

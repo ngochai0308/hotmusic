@@ -2,14 +2,10 @@
 
 namespace HotMusic.Models
 {
-    public class ChangePasswordViewModel
+    public class ResetPasswordViewModel
     {
-        [Required(ErrorMessage = "Mật khẩu không được để trống!")]
-        public string Password { get; set; }
-
-
         [Required(ErrorMessage = "Mật khẩu mới không được để trống!")]
-        [MinLength(4,ErrorMessage ="Mật khẩu phải lớn hơn 4 kí tự")] 
+        [MinLength(4, ErrorMessage = "Mật khẩu phải lớn hơn 4 kí tự")]
         public string NewPassword { get; set; }
 
 

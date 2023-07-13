@@ -8,6 +8,7 @@ using HotMusic.DataModel;
 using HotMusic.Models;
 using System.Security.Claims;
 using AutoMapper;
+using System.Security.Policy;
 
 namespace HotMusic.Controllers
 {
@@ -34,9 +35,10 @@ namespace HotMusic.Controllers
 
         public async Task<IActionResult> Logout()
         {
-            // Delete session
-            HttpContext.Session.Remove("UserName");
+			// Delete session
+			HttpContext.Session.Remove("UserName");
             HttpContext.Session.Remove("Role");
+            HttpContext.Session.Remove("Id");
 
             // Remove authen
             await HttpContext.SignOutAsync();
@@ -122,22 +124,22 @@ namespace HotMusic.Controllers
                         }
                         else
                         {
-                            if (checkUser.Role.ToLower() == "admin")
+                            if (checkUser.Role?.ToLower() == "admin")
                             {
                                 return RedirectToAction("index", "home", new { Area = "Admin" });
                             }
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("HomePage", "Home");
                         }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("UserName", "Tên đăng nhập hoặc mật khẩu không đúng!");
                     }
                 }
                 else
                 {
                     //ViewData["Error"] = "Tên đăng nhập hoặc mật khẩu không đúng!";
                     ModelState.AddModelError("UserName", "Tên đăng nhập hoặc mật khẩu không đúng!");
-
-                    ModelState.AddModelError("", "1.Tên đăng nhập hoặc mật khẩu không đúng!");
-                    ModelState.AddModelError("", "2.Tên đăng nhập hoặc mật khẩu không đúng!");
-
                 }
             }
             else
@@ -173,25 +175,82 @@ namespace HotMusic.Controllers
                     _context.SaveChanges();
                     Response.Cookies.Append("Password", user.NewPassword);
                     TempData["StatusMessage"] = "Đổi mật khẩu thành công!";
-                    return RedirectToAction("index", "Home");
+                    return RedirectToAction("HomePage", "Home");
                 }
                 else
                 {
                     ModelState.AddModelError("Password", "Mật khẩu nhập không đúng");
                 }
-                TempData["StatusMessage"] = "Mật khẩu nhập không đúng vui lòng nhập lại!";
             }
             
 
             return View();
         }
-
+        [AllowAnonymous]
+        public IActionResult FogotPassword()
+        {
+            return View();
+        }
+ 
         [AllowAnonymous]
         public IActionResult Accessdined()
         {
             return View();
         }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> FogotPassword(string email)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!_context.Users.Any(u => u.Email == email))
+                {
+                    ModelState.AddModelError("email", "Email bạn nhập không tồn tại trên hệ thống!");
+                    TempData["StatusMessage"] = "Email bạn nhập không tồn tại trên hệ thống!";
+                    return View();
+                }
+                var link = $"<a href=\"https://musicweb.online/resetpassword?email={email}\">Click here to reset your password</a>";
+                var body = $"Bạn vui lòng click vào trang này để thay đổi mật khẩu: {link}";
+                await MailsUtils.SendGmail("Hai0xautrai@gmail.com", email, "Lấy lại mật khẩu cho Website Music", body);
+                return View("Check");
+            }
 
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpGet("/resetPassword")]
+        public IActionResult ResetPassword()
+        {
+            var returnParam = HttpContext.Request.Query["email"];
+            if (!string.IsNullOrEmpty(returnParam))
+            {
+                HttpContext.Session.SetString("email", returnParam);
+            }
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost("/resetPassword")]
+        public IActionResult ResetPassword([Bind("NewPassword,ConfirmPassword")] ResetPasswordViewModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                string email = HttpContext.Session.GetString("email");
+                if (string.IsNullOrEmpty(email))
+                {
+                    return Content("Không tìm thấy email");
+                }
+                var checkUser = _context.Users.First(u=>u.Email==email);
+                if (checkUser == null)
+                {
+                    return Content("Không tìm thấy người dùng");
+                }
+                checkUser.Password = HashPass.HashPassword(user.NewPassword);
+                _context.SaveChanges();
+                TempData["StatusMessage"] = "Bạn đã thay đổi mật khẩu thành công";
+                return View("Login");
+            }
+            return View();
+        }
         private bool UsersExists(int id)
         {
             return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
@@ -201,7 +260,7 @@ namespace HotMusic.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Register([Bind("UserName,Password,Email,ConfilmPassword")] RegisterUserViewModel user)
+        public async Task<IActionResult> Register([Bind("UserName,Password,Email,ConfirmPassword")] RegisterUserViewModel user)
         {
             if (user.UserName != null && user.Email != null)
             {

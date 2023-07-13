@@ -2,45 +2,75 @@
 
 @{
     ViewData["Title"] = "Đăng nhập";
+    Layout = "/Views/Shared/_LayoutHomePage.cshtml";
 }
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<h1>Đăng nhập hệ thống</h1>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <span style="color:red;">@ViewData["Error"]</span>
-             
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-            <div asp-validation-summary="ModelOnly" class="text-danger">
-               
-            </div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" formnovalidate="formnovalidate" class="form-control" type="password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsRememberMe" class="control-label"></label>
-                <input asp-for="IsRememberMe" type="checkbox" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Đăng nhập" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+<body>
+    <partial name="_AlertMessage" />
+    <section class="ftco-section" style="padding-top:1em !important">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                    <div class="wrap d-md-flex">
+                        <div class="login-wrap p-4 p-lg-5" style="width:400px !important">
+                            <div class="d-flex">
+                                <div class="w-100">
+                                    <h3 class="mb-4">Đăng nhập</h3>
+                                </div>
+                                <div class="w-100">
+                                    <p class="social-media d-flex justify-content-end">
+                                        <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+                                        <a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
+                                    </p>
+                                </div>
+                            </div>
+                            <form asp-action="Login" method="post" class="signin-form">
+                                <div class="form-group mb-6">
+                                    <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-user"></span></div>
+                                    <input type="text" class="form-control" asp-for="UserName" placeholder="Username" required>
+                                    <span asp-validation-for="UserName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group mb-6">
+                                    <div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
+                                    <input type="password" class="form-control" asp-for="Password" placeholder="Password" required>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="form-group d-md-flex">
+                                    <div class="w-100 text-md-right">
+                                        <a asp-action="FogotPassword">Quên mật khẩu</a>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="form-control btn btn-primary submit px-3">Đăng nhập</button>
+                                </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                            </form>
+                            <div class="w-100 text-center mt-4 text">
+                                <p class="mb-0">Bạn chưa có tài khoản</p>
+                                <a asp-action="Register">Đăng kí</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/popper.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/main.js"></script>
+
+</body>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -18,6 +18,6 @@ namespace HotMusic.Models
 
         [Required(ErrorMessage = "xác nhận mật khẩu không được để trống")]
         [Compare("Password", ErrorMessage = "Mật khẩu nhập lại phải giống mật khẩu!")]
-        public string ConfilmPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }
