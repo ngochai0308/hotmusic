@@ -44,29 +44,31 @@
 }
 .bottom-div{
     margin-top: 20px;
+    margin-bottom:60px;
     background-color: black;
     height: 60%;
     width: 100%;
 }
-.element-bottom{
+.element-bottom, .element-song{
     width: 100%;
     color: #B3B3B3;
     padding: 5px;
     height: 60px;
     display: flex;
 }
-.element-bottom:hover{
-    background-color: #25282b;
-}
+
+    .element-bottom:hover {
+        background-color: #25282b;
+    }
 .stt {
     margin-left: 15px;
     margin-right: 10px;
     align-self: flex-end;
-  }
+}
   
   .title {
     margin-left: 20px;
-    width: 45%;
+    width: 35%;
     align-self: flex-end;
   }
     .img-song{

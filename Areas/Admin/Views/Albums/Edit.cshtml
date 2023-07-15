@@ -4,7 +4,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Chỉnh sửa</h1>
 
 <h4>Albums</h4>
 <hr />
@@ -36,11 +36,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="FileUpload"></label>
-                    <input asp-for="FileUpload" id="inputImage" style="display:none" />
+                    <input asp-for="FileUpload" id="inputImage"  />
                     <span asp-validation-for="FileUpload"></span>
                 </div>
                 <div class="image-fileupload">
-                    <img id="previewImage" alt="Ảnh xem trước" src="~/img/Song/@Model.Thumbnail" />
+                <img id="previewImage" alt="Ảnh xem trước" src="~/img/Song/@Model.Thumbnail" style="display:none" />
                 </div>
                  <input type="submit" value="Lưu" asp-route-id="@Model.AlbumId" class="btn btn-primary" />
         </form>
@@ -62,7 +62,7 @@
         var file = imageInput.files[0];
         if (file) {
             previewImage.src = URL.createObjectURL(file);
-            previewIimage.style.display='block';
+            previewImage.style.display = 'block';
         }
         else{
             previewImage.src='';

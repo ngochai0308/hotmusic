@@ -30,6 +30,7 @@ namespace HotMusic.Controllers
         public IActionResult HomePage()
         {
             ViewData["listAlbum"] = _albumRepository.GetAll();
+            ViewData["listAlbumHot"] = _albumRepository.GetAll().Where(a => a.ArtistId == 13 || a.ArtistId == 14).ToList();
             ViewData["Name"] = "Home";
             return View();
         }
@@ -110,7 +111,12 @@ namespace HotMusic.Controllers
             ViewData["listAlbum"] = listAlbum.ToList();
             return View();
         }
-
+        [Route("/playSong/{id}")]
+        public IActionResult PlaySong(int id)
+        {
+            var song = _songRepository.GetById(id);
+            return PartialView("_PlaySongPartial", song);
+        }
         public IActionResult Privacy()
         {
             return View();

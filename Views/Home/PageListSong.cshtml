@@ -9,11 +9,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Home page</title>
     <link href="~/css/PageListSong.css" rel="stylesheet">
 </head>
 <body>
-
     <div class="container">
         <div class="top-div">
             <div class="left-top">
@@ -38,7 +38,7 @@
             <hr>
             @foreach(var song in listSong)
             {
-                <div class="element-bottom">
+                <div class="element-bottom" id="@song.SongId">
                 <div class="stt"> @(i++)</div>
                 <div class="title">
                     <div class="img-song">
@@ -51,9 +51,26 @@
                 <div class="album">@song.CategoryTitle</div>
             </div>
             }
-            
+        </div>
+        <div class="playSong">
         </div>
     </div>
     
 </body>
 </html>
+<script>
+    var elements = $('.element-bottom');
+
+    elements.on('click',function(){
+        var id = $(this).attr('id');
+
+        $.ajax({
+            url: '/playSong/'+id,
+            method: 'GET',
+            dataType: 'html',
+            success: function(data){
+                $('.playSong').html(data);
+            }
+        });
+    });
+</script>

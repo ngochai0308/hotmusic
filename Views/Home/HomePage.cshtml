@@ -2,15 +2,34 @@
 @{
     Layout = "_LayoutHomePage";
     var listAlbum = ViewData["listAlbum"] as List<Albums>;
+    var listAlbumHot = ViewData["listAlbumHot"] as List<Albums>;
     var UserName = Context.Session.GetString("UserName") as string;
 }
 <html>
     <body>
     <partial name="_AlertMessage" />
         <div class="content-tab-right">
+            <div class="title-content">Nhạc Hot</div>
+
+            <div class="title-content-right"></div>
+
+            @foreach (var album in listAlbumHot)
+            {
+                <div class="item-content-tab-right" onclick="PageListSong('@album.AlbumId')">
+                    <div class="img-item">
+                        <img src="~/img/Album/@album.Thumbnail">
+                    </div>
+                    <div class="text-item">
+                        <p><b>@album.AlbumTitle</b></p>
+                        <p class="text-content"></p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="content-tab-right">
             <div class="title-content">Nhạc Trẻ</div>
 
-            <div class="title-content-right">Show all</div>
+            <div class="title-content-right"></div>
                 
             @foreach (var album in listAlbum.Take(5))
             {
@@ -29,7 +48,7 @@
         
         <div class="content-tab-right">
             <div class="title-content">Spotify Playlists</div>
-            <div class="title-content-right">Show all</div>
+            <div class="title-content-right"></div>
             <div class="item-content-tab-right">
                 <div class="img-item">
                     <img src="https://i.scdn.co/image/ab67706f000000022ac21dacd63a52de41721848">

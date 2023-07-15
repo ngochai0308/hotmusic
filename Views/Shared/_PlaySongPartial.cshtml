@@ -1,0 +1,19 @@
+﻿@model HotMusic.DataModel.Songs
+@{
+    var url = Model.SongUrl + ".mp3";
+}
+<div class="element-song">
+    <div class="title" style="float:left;width:35%;">
+        <div class="img-song">
+            <img src="~/img/Song/@Model.Image" alt="">
+        </div>
+        <div class="title-song">@Model.SongTitle</div>
+        <div class="title-artist">@Model.ArtistName</div>
+    </div>
+
+    <div style="float:left">
+        <audio src="~/audio/@url" controls autoplay></audio>
+    </div>
+    
+</div>
+

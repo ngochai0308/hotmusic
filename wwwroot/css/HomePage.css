@@ -1,4 +1,4 @@
-t@font-face {
+@font-face {
     font-family: 'Regular';
     src: url('../webfonts/Gilroy-Regular.ttf') format('truetype');
   }
@@ -256,4 +256,12 @@ pointer-events: none;
     margin: 11% 0px;
     height: 100%;
     width: 100%;
+}
+.playSong {
+    height: 60px;
+    width: 100%;
+    background-color:black;
+    position: fixed;
+    bottom: 0;
+    z-index: 3;
 }
