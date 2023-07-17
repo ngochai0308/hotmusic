@@ -47,7 +47,7 @@ namespace HotMusic.Repository
         /// <summary>
         /// Get artist by Id
         /// </summary>
-        /// <param name="id">Artist id</param>
+        /// <param name="id">Artists id</param>
         /// <returns></returns>
         public Artists GetById(int id)
         {
@@ -64,6 +64,12 @@ namespace HotMusic.Repository
         {
             _dbContext.Artists.Update(artist);
             _dbContext.SaveChanges();
+        }
+        public void CheckTrackedArtist(int id)
+        {
+            var trackedArtist = _dbContext.Artists.FirstOrDefault(a => a.ArtistId == id);
+            if (trackedArtist != null)
+                _dbContext.Entry(trackedArtist).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
         }
     }
 }

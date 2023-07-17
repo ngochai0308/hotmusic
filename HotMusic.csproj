@@ -137,6 +137,7 @@
     <Folder Include="wwwroot\img\Album\" />
     <Folder Include="wwwroot\img\Song\" />
     <Folder Include="wwwroot\csv\" />
+    <Folder Include="wwwroot\img\User\" />
   </ItemGroup>
 
 </Project>

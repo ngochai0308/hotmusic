@@ -10,5 +10,6 @@ namespace HotMusic.Contract
         void Update(Users user);
         void Delete(int id);
         void Add(Users user);
+        public void CheckTrackedUser(int id);
     }
 }

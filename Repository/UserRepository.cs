@@ -50,5 +50,11 @@ namespace HotMusic.Repository
             _dbContext.Users.Update(user);
             _dbContext.SaveChanges();
         }
+        public void CheckTrackedUser(int id)
+        {
+            var trackedUser = _dbContext.Users.FirstOrDefault(u => u.UserId == id);
+            if (trackedUser != null)
+                _dbContext.Entry(trackedUser).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+        }
     }
 }

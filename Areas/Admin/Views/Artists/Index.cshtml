@@ -1,5 +1,5 @@
 ﻿@using HotMusic.Common;
-@model PaginatedList<HotMusic.Models.ArtistViewModel>
+@model PaginatedList<HotMusic.Models.DisplayArtistViewModel>
 
 @{
     ViewData["Title"] = "Danh sách nghệ sĩ";
@@ -41,10 +41,12 @@ else
                     </a>
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.First().Avatar)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.FirstOrDefault().ArtistBio)
                 </th>
                 <th></th>
-            </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
@@ -55,6 +57,9 @@ else
                         @Html.DisplayFor(modelItem => item.ArtistName)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.Avatar)
+                    </td>
+                    <td class="truncate-text">
                         @Html.DisplayFor(modelItem => item.ArtistBio)
                     </td>
                     <td class="col-action">

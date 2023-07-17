@@ -17,6 +17,7 @@ builder.Services.AddDbContext<MusicDbContext>(options =>
 });
 
 // Register service
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<ISongRepository, SongRepository>();
 builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();

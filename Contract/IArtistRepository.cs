@@ -9,5 +9,6 @@ namespace HotMusic.Contract
         void Add(Artists artist);
         void Update(Artists artist);
         void Delete(int id);
+        public void CheckTrackedArtist(int id);
     }
 }

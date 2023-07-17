@@ -1,4 +1,24 @@
-﻿
+﻿@media(max-width:600px){
+    .element-bottom, .element-song {
+        width: 100%;
+        color: #B3B3B3;
+        padding: 5px;
+        height: 60px;
+        display: flex;
+    }
+    .title{
+        width:100% !important;
+    }
+    .album,.plays{
+        display:none;
+    }
+    .element-song .title{
+        display: none;
+    }
+    .right-top{
+        display:none;
+    }
+}
 @font-face {
     font-family: 'Regular-Bold';
     src: url('../webfonts/AvenirLTStd-Black.otf') format('truetype');
@@ -71,12 +91,12 @@
     width: 35%;
     align-self: flex-end;
   }
-    .img-song{
-        float: left;
-        margin-right: 10px;
-        height: 50px;
-        width: 50px;
-    }
+.img-song {
+    float: left;
+    margin-right: 10px;
+    height: 3em;
+    width: 3em;
+}
     .img-song img{
         height: 100%;
         width: 100%;

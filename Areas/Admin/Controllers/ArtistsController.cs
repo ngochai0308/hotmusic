@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotMusic.Common;
 using HotMusic.DataModel;
+using AutoMapper;
 
 namespace HotMusic.Areas.Admin.Controllers
 {
@@ -61,13 +62,13 @@ namespace HotMusic.Areas.Admin.Controllers
 
             var mapperConfig = new AutoMapper.MapperConfiguration(config =>
             {
-                config.CreateMap<Artists, ArtistViewModel>();
+                config.CreateMap<Artists, DisplayArtistViewModel>();
             });
             var mapper = mapperConfig.CreateMapper();
-            var listResult = mapper.Map<List<ArtistViewModel>>(listData);
+            var listResult = mapper.Map<List<DisplayArtistViewModel>>(listData);
 
             return _artistRepository != null ?
-                        View(await PaginatedList<ArtistViewModel>.CreateAsync(listResult, pageNumber ?? 1, _pageSize)) :
+                        View(await PaginatedList<DisplayArtistViewModel>.CreateAsync(listResult, pageNumber ?? 1, _pageSize)) :
                         Problem("Entity set 'MusicDbContext.Artists'  is null.");
         }
 
@@ -99,11 +100,28 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ArtistId,ArtistName,ArtistBio")] Artists artist)
+        public async Task<IActionResult> Create([Bind("ArtistId,ArtistName,Avatar,ArtistBio,FileUpload")] DisplayArtistViewModel artist)
         {
             if (ModelState.IsValid)
             {
-                _artistRepository.Add(artist);
+                var file1 = string.Empty;
+                if (artist.FileUpload != null)
+                {
+                    file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                       + Path.GetExtension(artist.FileUpload.FileName);
+                    var file = Path.Combine("wwwroot", "img", "Artist", file1);
+                    using var filestream = new FileStream(file, FileMode.Create);
+                    await artist.FileUpload.CopyToAsync(filestream);
+                }
+
+                var mapper = new MapperConfiguration(config => {
+                    config.CreateMap<DisplayArtistViewModel, Artists>();
+                }).CreateMapper();
+
+                var newArtist = mapper.Map<Artists>(artist);
+                newArtist.Avatar = file1;
+
+                _artistRepository.Add(newArtist);
                 return RedirectToAction(nameof(Index));
             }
             return View(artist);
@@ -122,7 +140,12 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(artist);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Artists, DisplayArtistViewModel>();
+            }).CreateMapper();
+            var displaySong = mapper.Map<DisplayArtistViewModel>(artist);
+            return View(displaySong);
         }
 
         // POST: Artists/Edit/5
@@ -130,7 +153,7 @@ namespace HotMusic.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ArtistId,ArtistName,ArtistBio")] Artists artist)
+        public async Task<IActionResult> Edit(int id, [Bind("ArtistId,ArtistName,Avatar,ArtistBio,FileUpload")] DisplayArtistViewModel artist)
         {
             if (id != artist.ArtistId)
             {
@@ -141,7 +164,32 @@ namespace HotMusic.Areas.Admin.Controllers
             {
                 try
                 {
-                    _artistRepository.Update(artist);
+                    var checkArtist = _artistRepository.GetById(artist.ArtistId);
+                    var oldFileName = checkArtist != null ? checkArtist.Avatar : string.Empty;
+                    var file1 = oldFileName;
+
+                    if (artist.FileUpload != null)
+                    {
+                        file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                           + Path.GetExtension(artist.FileUpload.FileName);
+                        var file = Path.Combine("wwwroot", "img", "Artist", file1);
+                        using var filestream = new FileStream(file, FileMode.Create);
+                        await artist.FileUpload.CopyToAsync(filestream);
+                    }
+
+                    var mapper = new MapperConfiguration(config => {
+                        config.CreateMap<DisplayArtistViewModel, Artists>();
+                    }).CreateMapper();
+                    if (!string.IsNullOrEmpty(oldFileName) && oldFileName != file1)
+                    {
+                        var fileOld = Path.Combine("wwwroot", "img", "Artist", oldFileName);
+                        if (System.IO.File.Exists(fileOld))
+                            System.IO.File.Delete(fileOld);
+                    }
+                    checkArtist = mapper.Map<Artists>(artist);
+                    checkArtist.Avatar = file1;
+                    _artistRepository.CheckTrackedArtist(artist.ArtistId);
+                    _artistRepository.Update(checkArtist);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,6 +206,7 @@ namespace HotMusic.Areas.Admin.Controllers
             }
             return View(artist);
         }
+
 
         // GET: Artists/Delete/5
         public async Task<IActionResult> Delete(int? id)

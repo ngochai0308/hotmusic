@@ -9,16 +9,20 @@ using HotMusic.Models;
 using System.Security.Claims;
 using AutoMapper;
 using System.Security.Policy;
+using WebsiteMusic.Models;
+using HotMusic.Contract;
 
 namespace HotMusic.Controllers
 {
     public class UsersController : Controller
     {
         private readonly MusicDbContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(MusicDbContext context)
+        public UsersController(MusicDbContext context,IUserRepository userRepository)
         {
             _context = context;
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]
@@ -32,11 +36,83 @@ namespace HotMusic.Controllers
             }
             return View();
         }
+        public IActionResult Profile(int id)
+        {
+            var user = _context.Users.First(u => u.UserId == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+        }
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == null || _context == null)
+            {
+                return NotFound();
+            }
 
+            var user = _context.Users.First(u => u.UserId == id);
+            var mapper = new MapperConfiguration(config =>
+            {
+                config.CreateMap<Users, EditUserViewModel>();
+            }).CreateMapper();
+            var displayUser = mapper.Map<EditUserViewModel>(user);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(displayUser);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,FileUpload,Password,DateOfBirth,Email,FullName,PhoneNumber,Gender,Address")] EditUserViewModel user)
+        {
+            if (id != user.UserId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+
+                var checkUser = _userRepository.GetById(id);
+                var oldFileName = checkUser.image != null ? checkUser.image : string.Empty;
+                var file1 = oldFileName;
+
+                if (user.FileUpload != null)
+                {
+                    file1 = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                    + Path.GetExtension(user.FileUpload.FileName);
+                    var file = Path.Combine("wwwroot", "img", "User", file1);
+                    using var filestream = new FileStream(file, FileMode.Create);
+                    await user.FileUpload.CopyToAsync(filestream);
+                }
+                //Xoa file anh cu neu co
+                if (!string.IsNullOrEmpty(oldFileName) && oldFileName != file1)
+                {
+                    var fileOld = Path.Combine("wwwroot", "img", "User", oldFileName);
+                    if (System.IO.File.Exists(fileOld))
+                        System.IO.File.Delete(fileOld);
+                }
+                HttpContext.Session.SetString("Image", file1);
+
+                var mapper = new MapperConfiguration(configure =>
+                {
+                    configure.CreateMap<EditUserViewModel, Users>()
+                    .ForMember(dest=>dest.image,opt => opt.MapFrom(src=>file1));
+                }).CreateMapper();
+                var updateUser = mapper.Map<Users>(user);
+
+                _userRepository.CheckTrackedUser(id);
+
+                _userRepository.Update(updateUser);
+                return RedirectToAction(nameof(Profile), new { id = user.UserId });
+            }
+            return View(user);
+        }
         public async Task<IActionResult> Logout()
         {
-			// Delete session
-			HttpContext.Session.Remove("UserName");
+            // Delete session
+            HttpContext.Session.Remove("UserName");
             HttpContext.Session.Remove("Role");
             HttpContext.Session.Remove("Id");
 
@@ -56,8 +132,8 @@ namespace HotMusic.Controllers
         {
             HttpContext.Session.SetString("UserName", user.UserName);
             HttpContext.Session.SetInt32("Id", user.UserId);
-
-            HttpContext.Session.SetString("Role", user.Role??"User");
+            HttpContext.Session.SetString("Image", user.image??"");
+            HttpContext.Session.SetString("Role", user.Role ?? "User");
         }
 
         /// <summary>
@@ -105,7 +181,7 @@ namespace HotMusic.Controllers
                             Response.Cookies.Append("Password", user.Password, cookieOption);
                         }
                         var role = checkUser.Role ?? "User";
-                            // Thong bao login cho authen
+                        // Thong bao login cho authen
                         var identity = new ClaimsIdentity(new[]
                         {
                             new Claim(ClaimTypes.Name, user.UserName),
@@ -156,7 +232,7 @@ namespace HotMusic.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult ChangePassword(int? id, [Bind("Password", "NewPassword", "ConfirmPassword")]ChangePasswordViewModel user)
+        public IActionResult ChangePassword(int? id, [Bind("Password", "NewPassword", "ConfirmPassword")] ChangePasswordViewModel user)
         {
             if (ModelState.IsValid)
             {
@@ -164,7 +240,7 @@ namespace HotMusic.Controllers
                 {
                     return Content("Không tìm thấy người dùng do id null");
                 }
-                var checkUser = _context.Users.FirstOrDefault(u=>u.UserId==id);
+                var checkUser = _context.Users.FirstOrDefault(u => u.UserId == id);
                 if (checkUser == null)
                 {
                     return Content("Không tìm thấy người dùng");
@@ -182,7 +258,7 @@ namespace HotMusic.Controllers
                     ModelState.AddModelError("Password", "Mật khẩu nhập không đúng");
                 }
             }
-            
+
 
             return View();
         }
@@ -191,7 +267,7 @@ namespace HotMusic.Controllers
         {
             return View();
         }
- 
+
         [AllowAnonymous]
         public IActionResult Accessdined()
         {
@@ -239,7 +315,7 @@ namespace HotMusic.Controllers
                 {
                     return Content("Không tìm thấy email");
                 }
-                var checkUser = _context.Users.First(u=>u.Email==email);
+                var checkUser = _context.Users.First(u => u.Email == email);
                 if (checkUser == null)
                 {
                     return Content("Không tìm thấy người dùng");

@@ -1,3 +1,15 @@
+@media (max-width:600px){
+    .tab-left {
+        display:none;   
+    }
+    .item-content-tab-right {
+        height: 10em !important;
+        width: 40% !important;
+        margin: 0.3em !important;
+    }
+
+}
+
 @font-face {
     font-family: 'Regular';
     src: url('../webfonts/Gilroy-Regular.ttf') format('truetype');
@@ -264,4 +276,11 @@ pointer-events: none;
     position: fixed;
     bottom: 0;
     z-index: 3;
+}
+.truncate-text {
+    display: inline-block;
+    width: 40em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
